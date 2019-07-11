@@ -164,7 +164,7 @@
                                 <div class="mdl-layout-spacer"></div>
                                 <div class="stat-perf">
                                     <div><p class="stat-perf-name">OFFENSE</p></div>
-                                    <div><p class="stat-perf-val">{{currentPlayer["offense_time"]}} s</p></div>
+                                    <div><p class="stat-perf-val">{{Math.round((currentPlayer["offense_time"] / currentPlayer["total_time"] * 100) * 100) / 100}} %</p></div>
                                 </div>
                                 <div class="mdl-layout-spacer"></div>
                             </div>
@@ -172,7 +172,7 @@
                                 <div class="mdl-layout-spacer"></div>
                                 <div class="stat-perf">
                                     <div><p class="stat-perf-name">DEFENSE</p></div>
-                                    <div><p class="stat-perf-val">{{currentPlayer["defense_time"]}} s</p></div>
+                                    <div><p class="stat-perf-val">{{Math.round((currentPlayer["defense_time"] / currentPlayer["total_time"] * 100) * 100) / 100}} %</p></div>
                                 </div>
                                 <div class="mdl-layout-spacer"></div>
                             </div>
@@ -180,7 +180,7 @@
                                 <div class="mdl-layout-spacer"></div>
                                 <div class="stat-perf">
                                     <div><p class="stat-perf-name">NEUTRAL</p></div>
-                                    <div><p class="stat-perf-val">{{currentPlayer["neutral_time"]}} s</p></div>
+                                    <div><p class="stat-perf-val">{{Math.round((currentPlayer["neutral_time"] / currentPlayer["total_time"] * 100) * 100) / 100}} %</p></div>
                                 </div>
                                 <div class="mdl-layout-spacer"></div>
                             </div>
@@ -250,7 +250,8 @@
                 defense_time:0,
                 neutral_time:0,
                 offense_time:0,
-                kda:0
+                kda:0,
+                total_time:0
             }
         }
     });
@@ -259,6 +260,7 @@
         app.currentPlayer.defense_time = Math.round(app.currentPlayer.defense_time * 100) / 100;
         app.currentPlayer.offense_time = Math.round(app.currentPlayer.offense_time * 100) / 100;
         app.currentPlayer.neutral_time = Math.round(app.currentPlayer.neutral_time * 100) / 100;
+        app.currentPlayer.total_time = app.currentPlayer.defense_time + app.currentPlayer.offense_time + app.currentPlayer.neutral_time;
     }
 
     window.onload = _ => {
