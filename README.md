@@ -1,4 +1,4 @@
-# Custom Rocket League Tracker
+# Custom Rocket League Tracker (Database Version)
 
 ## Description
 
