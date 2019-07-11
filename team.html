@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-deep_orange.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link
+        type="text/css"
+        rel="stylesheet"
+        href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
+    />
+
+    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <link rel="icon" href="logo.png"/>
+    <style>
+            body{
+                background: grey;
+            }
+            canvas{
+                height: 300px;
+                width: 300px;
+            }
+            .stat-perf{
+                display: flex;
+                flex-direction: column;
+            }
+            .stat-perf p{
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }
+            .stat-perf-name{
+                font-size: 10px;
+                padding: 0;
+                margin: 0;
+            }
+            .stat-perf-val{
+                font-size: 25px;
+            }
+            .pCell{
+                background-image: url('../webbanner.png');
+                border-radius: 10px;
+            }
+            .mdl-cell{
+                color:white;
+            }
+            .p-card{
+                cursor: pointer;
+            }
+        </style>
+    <title>RIT RL Tracker - Team</title>
+</head>
+<body>
+    <div id='app'>
+        <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+            <header class="mdl-layout__header mdl-layout__header--transparent">
+                <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">{{title}}</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation -->
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="..">Home</a>
+                    <a class="mdl-navigation__link" href="../team.html">Team</a>
+                    <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+                    <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+                </nav>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">{{title}}</span>
+                <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="..">Home</a>
+                <a class="mdl-navigation__link" href="../team.html">Team</a>
+                <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+                <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" v-on:click="sortPT">
+                            Sort By Playtime
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" v-on:click="sortDiv">
+                            Sort By Division
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" v-on:click="sortRev">
+                            Reverse
+                        </button>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col mdl-grid" id="loadingBar">
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                    
+                    <div class="mdl-cell mdl-cell--12-col pCell" v-for="player in playerStats['0']">
+                        <div class="mdl-grid p-card mdl-js-ripple-effect" v-on:click="profile(player['id'])">
+                            <div class="mdl-cell mdl-cell--10-col mdl-grid">
+                                <div class="mdl-cell mdl-cell--3-col">
+                                    <h4><span style='color:rgb(243,110,33)'>D{{player["division"]}}</span> {{player["name"]}}</h4>
+                                </div>
+                                <div class="mdl-cell mdl-cell--4-col">
+                                    <h4>Playtime: {{player["playtime"]}}</h4>
+                                </div>
+                                <!--div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" v-on:click="profile(player['id'])">profile</button>
+                                </div-->
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+<script src="client.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            title: 'RIT RL Tracker - Team',
+            playerStats: {
+                '0':[]
+            },
+            playTime: [{
+                0:{
+                    user:{
+                        response:{
+                            players:[]
+                        }
+                    }
+                }
+            }]
+            
+        },
+        methods:{
+            profile: function(id){
+                window.location.href = /*document.URL.substr(0,document.URL.indexOf("/")) +*/ "../player.html?player=" + id;
+            },
+            sortPT: ()=>{sort('playtime',app.playerStats["0"]);},
+            sortDiv: ()=>{sort('division',app.playerStats["0"]);},
+            sortRev: ()=>{app.playerStats["0"].reverse();}
+
+
+        }
+    });
+
+    window.onload = _ => {
+        fetch('/stats',{method:'GET'}).then(res=>res.json())
+            .then((data)=>{
+                fetch('/test',{method:'GET'}).then(res2=>res2.json())
+                    .then((data2)=>{
+                        console.log(data);
+                        //app.playerStats["0"] = sort('division',data["0"]);
+                        app.playerStats = data;
+                        console.log(data2);
+
+                        for(let p of app.playerStats['0']){
+                            for(let t of data2["result"]){
+                                if(p["id"] == t["user"]["response"]["players"]["0"]["steamid"]){
+                                    try{
+                                        for(let g of t["recent"]["response"]["games"]){
+                                            if(g["name"] == 'Rocket League'){
+                                                p["playtime"] = Math.round((g["playtime_2weeks"] / 60) * 100) / 100;
+                                            }
+                                        }
+                                    }
+                                    catch(exc){
+                                        p["playtime"] = 0;
+                                    }
+                                }
+                            }
+                        }
+
+                        sort('division',app.playerStats["0"]); //sort by playtime
+                        app.playerStats["0"].reverse(); //reverse the array
+
+                        document.querySelector('#loadingBar').style.display = 'none'; //hide loading bar
+                    }
+                );
+                
+            }
+        );
+    };
+
+    function sort(type,arr){
+        let ii = 1;
+        function insertionsort(){
+            let n = arr.length; 
+            for (; ii < n;) { 
+                let key = arr[ii]; 
+                let j = ii - 1; 
+
+                // Move elements of arr[0..i-1], 
+                // that are greater than key, 
+                // to one position ahead of 
+                // their current position 
+                while (j >= 0 && arr[j][type] > key[type]) { 
+                    //arr[j + 1] = arr[j]; 
+                    Vue.set(arr,j+1,arr[j]);
+                    j = j - 1; 
+                } 
+                arr[j + 1] = key; 
+                Vue.set(arr,j+1,key);
+                //break;
+                ii++;
+            }
+            //return arr;
+        }
+        console.log(arr);
+        return insertionsort();
+    }
+    
+</script>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-deep_orange.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link
+        type="text/css"
+        rel="stylesheet"
+        href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
+    />
+
+    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <link rel="icon" href="logo.png">
+    <style>
+        body{
+            background: grey;
+        }
+        form{
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        .mdl-textfield{/*corrects text field underline*/
+            padding-bottom: 28px;
+        }
+        .mdl-cell--3-col{
+            background-color: rgba(0, 0, 0, .25);
+            border-radius: 10px;
+        }
+    </style>
+    <title>RIT RL Tracker - Admin</title>
+</head>
+<body>
+    <div class="demo-layout-transparent mdl-layout mdl-js-layout" id="app">
+        <header class="mdl-layout__header mdl-layout__header--transparent">
+            <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">{{title}}</span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation -->
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="..">Home</a>
+                <a class="mdl-navigation__link" href="../team.html">Team</a>
+                <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+                <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+            </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">{{title}}</span>
+            <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="..">Home</a>
+            <a class="mdl-navigation__link" href="../team.html">Team</a>
+            <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+            <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--3-col">
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="password" id="access"/>
+                            <label class="mdl-textfield__label" for="access">Access Code</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="sid64"/>
+                            <label class="mdl-textfield__label" for="sid64">SteamID64</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="type"/>
+                            <label class="mdl-textfield__label" for="type">Edit Type</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="stat"/>
+                            <label class="mdl-textfield__label" for="stat">Stat</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input" type="text" id="value"/>
+                            <label class="mdl-textfield__label" for="value">Value</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="post">Add Player</button>
+                </div>
+                <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="delete">Delete Player</button>
+                </div>
+                <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="update">Update Player</button>
+                </div>
+                
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--middle mdl-grid">
+                    <div class="mdl-cell mdl-cell--3-col">
+                        <form action="#">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input class="mdl-textfield__input" type="text" id="clip"/>
+                                <label class="mdl-textfield__label" for="clip">Clip (gygID)</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="clippost">Add Clip</button>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+    <div id="toast" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+    
+</body>
+<script>
+    let app = new Vue({
+        el: '#app',
+        data: {
+            title: 'RIT RL Tracker - Admin'
+        }
+    });
+    let access = document.querySelector('#access');
+    let sid64 = document.querySelector('#sid64');
+    let type = document.querySelector('#type');
+    let value = document.querySelector('#value');
+    let stat = document.querySelector('#stat');
+    let clip = document.querySelector('#clip');
+
+    let snackbarContainer = document.querySelector('#toast');
+
+    document.querySelector('#post').onclick = e => {
+        console.log(access.value);
+        $.ajax({
+            headers:{
+                'content-type': "application/json"
+            },
+            type: 'POST',
+            url: document.URL.substr(0, document.URL.length - 5),
+            data: JSON.stringify({
+                0: sid64.value,
+                access: access.value
+            }),
+            success: function(res){
+                let data = {message: "Updates received by the server :)"};
+                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+            }
+        });
+    };
+
+    document.querySelector('#clippost').onclick = e => {
+        console.log(access.value);
+        $.ajax({
+            headers:{
+                'content-type': "application/json"
+            },
+            type: 'POST',
+            url: "../clips",
+            data: JSON.stringify({
+                0: clip.value,
+                1: access.value
+            }),
+            success: function(res){
+                let data = {message: "Updates received by the server :)"};
+                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+            }
+        });
+    };
+
+    document.querySelector('#delete').onclick = e => {
+        console.log(access.value);
+        $.ajax({
+            headers:{
+                'content-type': "application/json"
+            },
+            type: 'DELETE',
+            url: document.URL.substr(0, document.URL.length - 5),
+            data: JSON.stringify({
+                0: sid64.value,
+                access: access.value
+            }),
+            success: function(res){
+                let data = {message: "Updates received by the server :)"};
+                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+            }
+        });
+    };
+
+    document.querySelector('#update').onclick = e => {
+        $.ajax({
+            headers:{
+                'content-type': "application/json"
+            },
+            type: 'POST',
+            url: "../update",
+            data: JSON.stringify({
+                0: [{
+                    id: sid64.value,
+                    type: type.value,
+                    value: parseInt(value.value),
+                    stat: stat.value
+                }],
+                1: access.value
+            }),
+            success: function(res){
+                let data = {message: "Updates received by the server :)"};
+                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+            }
+        });
+    };
+</script>
+</html>

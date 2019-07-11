@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-deep_orange.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link
+        type="text/css"
+        rel="stylesheet"
+        href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
+    />
+
+    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <link rel="icon" href="logo.png">
+    <style>
+        body{
+            background: grey;
+        }
+        canvas{
+            height: 300px;
+            width: 300px;
+        }
+        .stat-perf{
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-perf p{
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .stat-perf-name{
+            font-size: 10px;
+            padding: 0;
+            margin: 0;
+        }
+        .stat-perf-val{
+            font-size: 25px;
+        }
+        .pCell{
+            background-image: url('../webbanner.png');
+            border-radius: 10px;
+        }
+        .nate-head{
+            color: white;
+        }
+        .nate-stats{
+            background-color: rgba(0, 0, 0, .75);
+            /*background-image: url('../webbanner.png');
+            background-position: center;
+            background-blend-mode: screen;*/
+            border-radius: 10px;
+            color: white;
+        }
+    </style>
+    <title>RIT RL Tracker - Player</title>
+</head>
+<body>
+    <div id='app'>
+        <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+            <header class="mdl-layout__header mdl-layout__header--transparent">
+                <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">{{title}}</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation -->
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="..">Home</a>
+                    <a class="mdl-navigation__link" href="../team.html">Team</a>
+                    <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+                    <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+                </nav>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">{{title}}</span>
+                <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="..">Home</a>
+                <a class="mdl-navigation__link" href="../team.html">Team</a>
+                <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+                <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--12-col pCell">
+                        <div class="mdl-grid nate-head">
+                            <div class="mdl-cell mdl-cell--bottom mdl-cell--12-col">
+                                <h1><span style="color:rgb(243,110,33)">D{{currentPlayer["division"]}}</span> {{currentPlayer["name"]}}</h1>
+                            </div>
+                            <!--div class="mdl-cell mdl-cell--middle">
+                                <h4 style="color:rgb(243,110,33)">/ Division {{currentPlayer["division"]}}</h4>
+                            </div-->
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col nate-stats">
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>Performance</h4></div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">GOALS</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["goals"]}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">ASSISTS</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["assists"]}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">DEMOS</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["demos"]}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">SHOTS</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["shots"]}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">SAVES</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["saves"]}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">GAMES</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["games"]}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">OFFENSE</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["offense_time"]}} s</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">DEFENSE</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["defense_time"]}} s</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">NEUTRAL</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["neutral_time"]}} s</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">K:D AVG</p></div>
+                                    <div><p class="stat-perf-val">{{currentPlayer["kda"]}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col nate-stats">
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>Play Style</h4></div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <canvas id="actions">nice browser :///</canvas>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <canvas id="rotations">nice browser :///</canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col nate-stats">
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>Team Comparison</h4></div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <canvas id="team-stats">nice browser :///</canvas>
+                            </div>
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <canvas id="team-rotations">nice browser :///</canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+    </div>
+</body>
+<script src="client.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            title: 'RIT RL Tracker - Player',
+            playerStats: null,
+            currentPlayer: {
+                id: "0",
+                name: "ph",
+                goals:0,
+                assists:0,
+                saves:0,
+                shots:0,
+                demos:0,
+                games:0,
+                division:0,
+                defense_time:0,
+                neutral_time:0,
+                offense_time:0,
+                kda:0
+            }
+        }
+    });
+
+    function roundPlayer(){
+        app.currentPlayer.defense_time = Math.round(app.currentPlayer.defense_time * 100) / 100;
+        app.currentPlayer.offense_time = Math.round(app.currentPlayer.offense_time * 100) / 100;
+        app.currentPlayer.neutral_time = Math.round(app.currentPlayer.neutral_time * 100) / 100;
+    }
+
+    window.onload = _ => {
+        fetch('/stats',{method:'GET'}).then(res=>res.json())
+            .then((data)=>{
+                console.log(data);
+                app.playerStats = data;
+                //grab player
+                let player = getUrlParam('player',null);
+                //console.log(player);
+                for(let p of app.playerStats["0"]){
+                    if(p["id"] == "" + player){
+                        app.currentPlayer = p;
+                        roundPlayer();
+                        app.currentPlayer.kda = Math.round(p["demos"]/p["demoed"] * 100) / 100;
+                        break;
+                    }
+                }
+
+
+                let actions = document.querySelector('#actions');
+                let actx = actions.getContext('2d');
+                let aChart = new Chart(actx, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: [app.currentPlayer["goals"],app.currentPlayer["assists"],app.currentPlayer["saves"]],
+                            backgroundColor: ['rgb(243,110,33)','rgb(150,150,150)','rgb(0,0,0)']
+                        }],
+                        labels: ["Goals","Assists","Saves"]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Actions'
+                        }
+                    }
+                });
+
+                let rotations = document.querySelector('#rotations');
+                let rctx = rotations.getContext('2d');
+                let rChart = new Chart(rctx, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: [app.currentPlayer["offense_time"],app.currentPlayer["neutral_time"],app.currentPlayer["defense_time"]],
+                            backgroundColor: ['rgb(243,110,33)','rgb(150,150,150)','rgb(0,0,0)']
+                        }],
+                        labels: ["Offense","Neutral","Defense"]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Rotations'
+                        }
+                    }
+                });
+                
+                let avg = {
+                    goals:0,
+                    shots:0,
+                    saves:0,
+                    demos:0,
+                    assists:0,
+                    def:0,
+                    off:0,
+                    neu:0
+                };
+                for(let i of app.playerStats["0"]){
+                    avg.goals+=i["goals"];
+                    avg.shots+=i["shots"];
+                    avg.saves+=i["saves"];
+                    avg.demos+=i["demos"];
+                    avg.assists+=i["assists"];
+                    avg.def+=i["defense_time"];
+                    avg.off+=i["offense_time"];
+                    avg.neu+=i["neutral_time"];
+                }
+
+                //get averages and round to 2 decimal places
+                avg.goals = Math.round((avg.goals / app.playerStats["0"].length) * 100) / 100;
+                avg.shots = Math.round((avg.shots / app.playerStats["0"].length) * 100) / 100;
+                avg.saves = Math.round((avg.saves / app.playerStats["0"].length) * 100) / 100;
+                avg.demos = Math.round((avg.demos / app.playerStats["0"].length) * 100) / 100;
+                avg.assists = Math.round((avg.assists / app.playerStats["0"].length) * 100) / 100;
+                avg.def = Math.round((avg.def / app.playerStats["0"].length) * 100) / 100;
+                avg.off = Math.round((avg.off / app.playerStats["0"].length) * 100) / 100;
+                avg.neu = Math.round((avg.neu / app.playerStats["0"].length) * 100) / 100;
+
+                let tstats = document.querySelector('#team-stats');
+                let sctx = tstats.getContext('2d');
+                let sChart = new Chart(sctx, {
+                    type: 'radar',
+                    data: {
+                        datasets: [{
+                            data: [app.currentPlayer["goals"],app.currentPlayer["shots"],app.currentPlayer["assists"],app.currentPlayer["saves"],app.currentPlayer["demos"]],
+                            label: app.currentPlayer["name"],
+                            backgroundColor: 'rgba(243,110,33,.25)',
+                            borderColor: 'rgb(243,110,33)'
+                        },
+                        {
+                            data: [avg.goals,avg.shots,avg.assists,avg.saves,avg.demos],
+                            label: "Team Average",
+                            backgroundColor: 'rgba(255,255,255,.25)',
+                            borderColor: 'rgb(255,255,255)'
+                        }],
+                        labels: ["Goals","Shots","Assists","Saves","Demos"]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Statistics'
+                        },
+                        scale: {
+                            gridLines: {
+                                color:'rgba(255,255,255,.3)'
+                            }
+                        },
+                        tooltips: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    return data.datasets[tooltipItem.datasetIndex].label + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                                }
+                            }
+                        }
+                    }
+                });
+
+                let trstats = document.querySelector('#team-rotations');
+                let trctx = trstats.getContext('2d');
+                let trChart = new Chart(trctx, {
+                    type: 'radar',
+                    data: {
+                        datasets: [{
+                            data: [app.currentPlayer["offense_time"],app.currentPlayer["neutral_time"],app.currentPlayer["defense_time"]],
+                            label: app.currentPlayer["name"],
+                            backgroundColor: 'rgba(243,110,33,.25)',
+                            borderColor: 'rgb(243,110,33)'
+                        },
+                        {
+                            data: [avg.off,avg.neu,avg.def],
+                            label: "Team Average",
+                            backgroundColor: 'rgba(255,255,255,.25)',
+                            borderColor: 'rgb(255,255,255)'
+                        }],
+                        labels: ["Offense Time","Neutral Time","Defense Time"]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: 'Rotations'
+                        },
+                        scale: {
+                            gridLines: {
+                                color:'rgba(255,255,255,.3)'
+                            }
+                        },
+                        tooltips: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    return data.datasets[tooltipItem.datasetIndex].label + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + ' s';
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        );
+
+        
+    }
+
+</script>
+</html>

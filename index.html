@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-deep_orange.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link
+        type="text/css"
+        rel="stylesheet"
+        href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
+    />
+
+    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <link rel="icon" href="logo.png">
+    <style>
+        body{
+            background: grey;
+        }
+        h1{
+            color: black;
+            text-align: center;
+            text-shadow: -1px 0 rgb(243,110,33), 0 1px rgb(243,110,33), 1px 0 rgb(243,110,33), 0 -1px rgb(243,110,33);
+        }
+        img{
+            max-width: 30%;
+        }
+        .nate-cell-hor{
+            display: flex;
+            flex-direction: row;
+        }
+        .nate-cell-ver{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        video {
+            object-fit: fill;
+            opacity: .75;
+        }
+    </style>
+    <title>RIT RL Tracker</title>
+</head>
+<body>
+    <div id='app'>
+        <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+            <header class="mdl-layout__header mdl-layout__header--transparent">
+                <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">{{title}}</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation -->
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="..">Home</a>
+                    <a class="mdl-navigation__link" href="../team.html">Team</a>
+                    <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+                    <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+                </nav>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">{{title}}</span>
+                <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="..">Home</a>
+                <a class="mdl-navigation__link" href="../team.html">Team</a>
+                <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+                <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="mdl-grid">
+                    <div class="mdl-layout-spacer"></div>
+                    <div class="mdl-cell mdl-cell--8-col mdl-grid nate-cell-ver">
+                        <!--div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
+                            <img src="ritcarball.jpg"/>
+                        </div-->
+                        <img src="logo.png"/>
+                        <h1>{{title}}</h1>
+                    </div>
+                    <div class="mdl-layout-spacer"></div>
+
+                </div>
+                <!--b-table class="w-75 mx-auto" striped hover :items="tData"></b-table-->
+            </main>
+        </div>
+        
+    </div>
+    <video id="myVideo" muted>
+        <source src="https://media.gifyourgame.com/CentristLordlyElden_1080p.mp4" id="mp4Source" type="video/mp4">
+        Your browser does not support videos :(
+    </video>
+</body>
+<script src="./client.js"></script>
+<script>
+var app = new Vue({
+    el: '#app',
+    data: {
+        getBtn: function()
+        { 
+            //app.tData = []; getData();
+            console.log('clicked');
+            $.ajax({
+                url: document.URL + "chase",
+                type:'GET',
+                success: function(e){
+                    console.log(e);
+                },
+                error: function(e){
+                    console.log(e);
+                }
+            });
+        },
+        sendBtn: function(){
+            sendFile();
+        },
+        tData: [],
+        title: "RIT Rocket League Tracker"
+    }
+});
+
+let clips = [];
+let clipObjs = [];
+let clipIndex = 0;
+let player=document.getElementById('myVideo');
+let mp4Vid = document.getElementById('mp4Source');
+player.addEventListener('ended',swapGifSource,false);
+
+window.onload = _ => {
+    /*player.width = window.innerWidth;
+    player.height = window.innerHeight;*/
+    getData();
+    fetch('/clips',{method:'GET'}).then(res=>res.json())
+        .then((data)=>{
+            console.log(data);
+            clips = data["0"];
+            swapGifSource(false); // - temp disabled to work on home page
+
+            // - CORS restriction with the following code (this code tries to buffer video before being played)
+            /*let reqs = [];
+            for(let i = 0; i < clips.length; i++){
+                reqs.push(new XMLHttpRequest());
+                reqs[i].open('GET',`https://media.gifyourgame.com/${clips[i]}_1080p.mp4`,true);
+                reqs[i].responseType = 'blob';
+                reqs[i].onload = () => {
+                    if(this.status === 200){
+                        let vBlob = this.response;
+                        let vid = URL.createObjectURL(vBlob);
+                        clipObjs.push(vid);
+                        if(clipObjs.length === 1){
+                            swapGifSource(false);
+                        }
+                    }
+                }
+                reqs[i].onerror = () => {
+                    console.log('error preloading a clip');
+                }
+                reqs[i].send();
+            }*/
+        }
+    )
+};
+
+function swapGifSource(e)
+{
+    if(!e) 
+    {
+        e = window.event; 
+    }
+    mp4Vid.src = `https://media.gifyourgame.com/${clips[clipIndex]}_1080p.mp4`;
+    //mp4Vid.src = clipObjs[clipIndex];
+    player.load();
+    player.play();
+    clipIndex++;
+    if(clipIndex >= clips.length){
+        clipIndex = 0;
+    }
+}
+</script>
+</html>
