@@ -66,7 +66,7 @@
         Removes a player based on their steamID64.
 
 ## Notes
-   * Any images currently in the repository are owned by RIT Esports, and are not to be used in personal applications. Please replace any images with your own if you choose to use this source code for your own project.
+   * Any images currently in the repository are owned by RIT Esports, and are not to be used in personal applications. Please replace any images with your own if you choose to use this source code for your own project. IN ADDITION: the orange color used is owned by RIT, and cannot be used by anyone non-affiliated with RIT.
 
    * This application is still under development, so changes will occur often.
 
