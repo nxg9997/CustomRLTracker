@@ -4,3 +4,8 @@ npm-debug.log
 /*.env
 *.replay
 *.csv
+config.js
+clips.json
+players.json
+replays.json
+stats.json
