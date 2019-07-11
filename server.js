@@ -12,6 +12,7 @@ let multer = require('multer');
 let upload = multer();
 const axios = require('axios');
 let Request = require('request');
+let mysql = require('mysql');
 
 //get config information from config.js
 let config = require("./config");
@@ -480,6 +481,69 @@ app.post('/clips', (req,res)=>{
     });
     
 });
+
+//adds all json stats data into a pre-existing database
+function initDB(){
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+
+    conn.connect();
+
+    fs.readFile('stats.json',(err,data)=>{
+        if(err){
+            console.log(err);
+            return;
+        }
+        else{
+            let stats = JSON.parse(data.toString());
+
+            for(let s of stats["0"]){
+                conn.query(`insert into stats (steamid,name,goals,assists,saves,shots,demos,demoed,games,division,defense_time,offense_time,neutral_time) values ("${s['id']}","${s['name']}",${s['goals']},${s['assists']},${s['saves']},${s['shots']},${s['demos']},${s['demoed']},${s['games']},${s['division']},${s['defense_time']},${s['offense_time']},${s['neutral_time']})`, (err,res,fields) => {
+                    if(err){
+                        console.log(err);
+                        return;
+                    }
+                    else{
+                        console.log(res);
+                    }
+                });
+            }
+
+            conn.end();
+        }
+    });
+}
+
+//grabs row data based on the given steamID64
+function getDataDB(id){
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+
+    conn.connect();
+
+    conn.query(`select * from stats where steamid="${id}"`,(err,res,fields)=>{
+        if(err){
+            console.log(err);
+            return;
+        }
+        else{
+            console.log(res);
+        }
+    });
+
+    conn.end();
+}
+
+//initDB();
+//getDataDB('76561198129260496');//test with whitebark's steamID
 
 //start server
 app.listen(port);
