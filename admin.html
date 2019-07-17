@@ -68,7 +68,136 @@
         </div>
         <main class="mdl-layout__content">
             <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--3-col">
+                <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                        <div class="mdl-layout-spacer"></div>
+                        <div><h4>Authentication</h4></div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                    <div class="mdl-grid">
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="password" id="access" v-model="access"/>
+                                    <label class="mdl-textfield__label" for="access">Access Code</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-grid">
+                        <div class="mdl-layout-spacer"></div>
+                        <div><h4>New Player</h4></div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
+                                    <label class="mdl-textfield__label" for="sid64">SteamID64</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="post" v-on:click="post">Add Player</button>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-grid">
+                        <div class="mdl-layout-spacer"></div>
+                        <div><h4>Remove Player</h4></div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
+                                    <label class="mdl-textfield__label" for="sid64">SteamID64</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="delete" v-on:click="deletep">Delete Player</button>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-grid">
+                        <div class="mdl-layout-spacer"></div>
+                        <div><h4>Edit Player</h4></div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
+                                    <label class="mdl-textfield__label" for="sid64">SteamID64</label>
+                                </div>
+                            </form>
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="type" v-model="type"/>
+                                    <label class="mdl-textfield__label" for="type">Edit Type</label>
+                                </div>
+                            </form>
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="stat" v-model="stat"/>
+                                    <label class="mdl-textfield__label" for="stat">Stat</label>
+                                </div>
+                            </form>
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="value" v-model="value"/>
+                                    <label class="mdl-textfield__label" for="value">Value</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="update" v-on:click="update">Update Player</button>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-grid">
+                        <div class="mdl-layout-spacer"></div>
+                        <div><h4>Add Clip</h4></div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--6-col">
+                            <form action="#">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="clip" v-model="clip"/>
+                                    <label class="mdl-textfield__label" for="clip">Clip (gygID)</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="clippost" v-on:click="clippost">Add Clip</button>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
+                </div>
+                <!--div class="mdl-cell mdl-cell--3-col">
                     <form action="#">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input class="mdl-textfield__input" type="password" id="access"/>
@@ -130,7 +259,7 @@
                     <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="clippost">Add Clip</button>
                     </div>
-                </div>
+                </div-->
             </div>
             
         </main>
@@ -145,9 +274,21 @@
     let app = new Vue({
         el: '#app',
         data: {
-            title: 'RIT RL Tracker - Admin'
+            title: 'RIT RL Tracker - Admin',
+            access: "",
+            sid64: "",
+            type: "",
+            value: "",
+            stat: "",
+            clip: "",
+            post: addplayerdb,
+            deletep: deletePlayer,
+            update: updatePlayer,
+            clippost: addClip
         }
     });
+    let snackbarContainer = document.querySelector('#toast');
+
     let access = document.querySelector('#access');
     let sid64 = document.querySelector('#sid64');
     let type = document.querySelector('#type');
@@ -155,9 +296,8 @@
     let stat = document.querySelector('#stat');
     let clip = document.querySelector('#clip');
 
-    let snackbarContainer = document.querySelector('#toast');
 
-    document.querySelector('#post').onclick = e => {
+    function addPlayer() {
         console.log(access.value);
         $.ajax({
             headers:{
@@ -167,25 +307,6 @@
             url: document.URL.substr(0, document.URL.length - 5),
             data: JSON.stringify({
                 0: sid64.value,
-                access: access.value
-            }),
-            success: function(res){
-                let data = {message: "Updates received by the server :)"};
-                snackbarContainer.MaterialSnackbar.showSnackbar(data);
-            }
-        });
-    };
-
-    document.querySelector('#clippost').onclick = e => {
-        console.log(access.value);
-        $.ajax({
-            headers:{
-                'content-type': "application/json"
-            },
-            type: 'POST',
-            url: "../clips",
-            data: JSON.stringify({
-                0: clip.value,
                 1: access.value
             }),
             success: function(res){
@@ -195,17 +316,36 @@
         });
     };
 
-    document.querySelector('#delete').onclick = e => {
+    function addClip() {
+        console.log(access.value);
+        $.ajax({
+            headers:{
+                'content-type': "application/json"
+            },
+            type: 'POST',
+            url: "../clipdb",
+            data: JSON.stringify({
+                0: app.clip,
+                1: app.access
+            }),
+            success: function(res){
+                let data = {message: "Updates received by the server :)"};
+                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+            }
+        });
+    };
+
+    function deletePlayer() {
         console.log(access.value);
         $.ajax({
             headers:{
                 'content-type': "application/json"
             },
             type: 'DELETE',
-            url: document.URL.substr(0, document.URL.length - 5),
+            url: '../deletedb',
             data: JSON.stringify({
-                0: sid64.value,
-                access: access.value
+                0: app.sid64,
+                1: app.access
             }),
             success: function(res){
                 let data = {message: "Updates received by the server :)"};
@@ -214,21 +354,21 @@
         });
     };
 
-    document.querySelector('#update').onclick = e => {
+    function updatePlayer() {
         $.ajax({
             headers:{
                 'content-type': "application/json"
             },
             type: 'POST',
-            url: "../update",
+            url: "../updatedb",
             data: JSON.stringify({
                 0: [{
-                    id: sid64.value,
-                    type: type.value,
-                    value: parseInt(value.value),
-                    stat: stat.value
+                    id: app.sid64,
+                    type: app.type,
+                    value: parseInt(app.value),
+                    stat: app.stat
                 }],
-                1: access.value
+                1: app.access
             }),
             success: function(res){
                 let data = {message: "Updates received by the server :)"};
@@ -236,5 +376,18 @@
             }
         });
     };
+
+    function addplayerdb(id){
+        $.ajax({
+            headers:{'content-type':'application/json'},
+            type:'post',
+            url:"../addplayerdb",
+            data: JSON.stringify({
+                0: app.sid64,
+                1: app.access
+            })
+            
+        });
+    }
 </script>
 </html>

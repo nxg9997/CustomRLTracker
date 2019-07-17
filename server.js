@@ -482,6 +482,8 @@ app.post('/clips', (req,res)=>{
     
 });
 
+/// - database functions
+
 //adds all json stats data into a pre-existing database
 function initDB(){
     let conn = mysql.createConnection({
@@ -520,6 +522,8 @@ function initDB(){
 
 //grabs row data based on the given steamID64
 function getDataDB(id){
+    let result = null;
+
     let conn = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -536,11 +540,230 @@ function getDataDB(id){
         }
         else{
             console.log(res);
+            result = res;
         }
     });
 
     conn.end();
+
+    return result;
 }
+
+app.get('/getdb', function(req,res){
+    let result = null;
+
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+
+    conn.connect();
+
+    conn.query(`select * from stats`,(err,res2,fields)=>{
+        if(err){
+            console.log(err);
+            return;
+        }
+        else{
+            console.log(res2);
+            result = res2;
+            res.send(result);
+        }
+    });
+
+    conn.end();
+
+});
+
+// - adds a new player based on their steamID64
+app.post('/addplayerdb', function(req,res){
+    if(req.body["1"] != password){
+        res.send({result:'bad access code'});
+        return;
+    }
+    let id = req.body["0"];
+    console.log(req.body);
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+
+    https.get(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${id}`, (res3) => {
+        let data2 = "";
+        res3.on('data', (chunk2) => {
+            data2 += chunk2;
+        });
+        res3.on('end', () => {
+            let obj = {};
+            //try{
+            // package player up into an object, add the player object to the result
+            obj = {
+                user: JSON.parse(data2),
+                stats: `https://rocketleague.tracker.network/profile/steam/${id}`
+            };
+            /*}
+            catch(exc){console.log(exc);}*/
+            //res.send(obj);
+            //result.push(obj);
+            // if the result length equals the number of players, send the result back to the application
+            /*if(result.length == players["0"].length){
+                res.send({result: result});
+            }*/
+
+            conn.connect();
+
+            conn.query(`insert into stats (steamid,name,goals,assists,saves,shots,demos,demoed,games,division,defense_time,offense_time,neutral_time) values ("${id}","${obj['user']["response"]["players"][0]["personaname"]}",0,0,0,0,0,0,0,0,0,0,0)`,(err,res2,fields)=>{
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                else{
+                    console.log(res2);
+                    /*result = res2;
+                    res.send(result);*/
+                }
+            });
+
+            conn.end();
+        });
+    }).on('error', (err2) => {
+        //res.send({result: 'error'});
+    });
+
+    
+
+});
+
+// - deletes a player from the database
+app.delete('/deletedb', (req,res)=>{
+    if(req.body["1"] != password){
+        res.send({result:'bad access code'});
+        return;
+    }
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+    conn.connect();
+    conn.query(`delete from stats where steamid="${req.body["0"]}"`,(err,res2,fields)=>{
+        if(err){
+            console.log(err);
+            res.send({result: 'error'});
+            return;
+        }
+        else{
+            res.send({result: 'success'});
+        }
+    });
+    conn.end();
+});
+
+// - add a clip to the database
+app.post('/clipdb',(req,res)=>{
+    if(req.body["1"] != password){
+        res.send({result:'bad access code'});
+        return;
+    }
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+    conn.connect();
+    conn.query(`insert into clips (id) values("${req.body["0"]}")`,(err,res2,fields)=>{
+        if(err){
+            console.log(err);
+            res.send({result: 'error'});
+            return;
+        }
+        else{
+            res.send({result: 'success'});
+        }
+    });
+    conn.end();
+});
+
+// - remove a clip from the database
+app.delete('/clipdb',(req,res)=>{
+    if(req.body["1"] != password){
+        res.send({result:'bad access code'});
+        return;
+    }
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+    conn.connect();
+    conn.query(`delete from clips where id="${req.body["0"]}"`,(err,res2,fields)=>{
+        if(err){
+            console.log(err);
+            res.send({result: 'error'});
+            return;
+        }
+        else{
+            res.send({result: 'success'});
+        }
+    });
+    conn.end();
+});
+
+// - update player in the database
+app.post('/updatedb',(req,res)=>{
+    if(req.body["1"] != password){
+        res.send({result:'bad access code'});
+        return;
+    }
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+    conn.connect();
+    for(let p of req.body["0"]){
+        let newVal;
+        conn.query(`select * from stats where steamid="${p["id"]}"`,(err,res2,fields)=>{
+            if(err){
+                console.log(err);
+                //res.send({result: 'error'});
+                return;
+            }
+            else{
+                //console.log(res2);
+                newVal = res2[0][p["stat"]];
+                if(p["type"] === 'add'){
+                    newVal += p["value"];
+                }
+                else if(p["type"] === 'change'){
+                    newVal = p["value"];
+                }
+                conn.query(`update stats set ${p["stat"]} = ${newVal} where steamid="${p["id"]}"`,(err,res2,fields)=>{
+                    if(err){
+                        console.log(err);
+                        //res.send({result: 'error'});
+                    }
+                    else{
+                        //res.send({result: 'success'});
+                    }
+                    conn.end();
+                });
+            }
+        });
+        
+    }
+    
+
+    res.send({result:"done"});
+});
 
 //initDB();
 //getDataDB('76561198129260496');//test with whitebark's steamID
