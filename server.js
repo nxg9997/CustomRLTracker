@@ -549,6 +549,32 @@ function getDataDB(id){
     return result;
 }
 
+app.post('/playerstats',(req,res)=>{
+    console.log(req.body);
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+
+    conn.connect();
+
+    conn.query(`select * from stats where steamid="${req.body["0"]}"`,(err,res2,fields)=>{
+        if(err){
+            console.log(err);
+            return;
+        }
+        else{
+            console.log(res2);
+            //result = res2;
+            res.send(res2);
+        }
+    });
+
+    conn.end();
+});
+
 // - gets all players in the database
 app.get('/getdb', function(req,res){
     let result = null;
@@ -795,6 +821,51 @@ app.post('/auth',(req,res)=>{
     else{
         res.send({result:false});
     }
+});
+
+app.get('/playtime',(req,res)=>{
+
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+    conn.connect();
+    conn.query(`select * from stats`,(err,res2,fields)=>{
+        if(err){
+            console.log(err);
+            res.send({result: 'error'});
+            return;
+        }
+        else{
+            //res.send(JSON.stringify(res2));
+            let toSend = [];
+            for(let p of res2){
+                //console.log(i++);
+                // grab the recent playtimes of all the players
+                https.get(`https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${steamKey}&steamid=${p.steamid}&format=json`, (res3) => {
+                    let data = "";
+                    res3.on('data', (chunk) => {
+                        data += chunk;
+                    });
+                    res3.on('end', () => {
+                        let obj = {
+                            steamid: p.steamid,
+                            recent: JSON.parse(data)
+                        };
+                        toSend.push(obj);
+                        if(toSend.length == res2.length){
+                            res.send(JSON.stringify(toSend));
+                        }
+                    });
+                });
+            }
+        }
+    });
+    conn.end();
+
+    
 });
 
 //initDB();

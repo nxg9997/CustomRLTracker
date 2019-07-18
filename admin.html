@@ -255,6 +255,48 @@
                             <div class="mdl-layout-spacer"></div>
                         </div>
                     </div>
+                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                        <div class="mdl-layout-spacer"></div>
+                        <div class="mdl-cell mdl-cell--10-col">
+                            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                                <thead>
+                                    <tr>
+                                        <th class="mdl-data-table__cell--non-numeric">Name</th>
+                                        <th class="mdl-data-table__cell--non-numeric">SteamID64</th>
+                                        <th>Goals</th>
+                                        <th>Assists</th>
+                                        <th>Saves</th>
+                                        <th>Shots</th>
+                                        <th>Demos</th>
+                                        <th>Demoed</th>
+                                        <th>Games</th>
+                                        <th>Division</th>
+                                        <th>Defense Time</th>
+                                        <th>Offense Time</th>
+                                        <th>Neutral Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="p of playerData" v-on:click="tableClick(p)">
+                                        <td class="mdl-data-table__cell--non-numeric">{{p.name}}</td>
+                                        <td>{{p.steamid}}</td>
+                                        <td>{{p.goals}}</td>
+                                        <td>{{p.assists}}</td>
+                                        <td>{{p.saves}}</td>
+                                        <td>{{p.shots}}</td>
+                                        <td>{{p.demos}}</td>
+                                        <td>{{p.demoed}}</td>
+                                        <td>{{p.games}}</td>
+                                        <td>{{p.division}}</td>
+                                        <td>{{p.defense_time}}</td>
+                                        <td>{{p.offense_time}}</td>
+                                        <td>{{p.neutral_time}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mdl-layout-spacer"></div>
+                    </div>
                 </div>
                 <div class="mdl-tabs__panel" id="scroll-tab-4">
                     <div class="mdl-cell mdl-cell--12-col mdl-grid">
@@ -393,18 +435,21 @@
                 'defense_time',
                 'offense_time',
                 'neutral_time'
-            ]
+            ],
+            selectedPlayer: null
         },
         methods: {
             tableClick: (player) => {
                 //console.log(e);
                 app.sid64 = player.steamid;
+                app.selectedPlayer = player;
             },
             typeSelect: (t) => {
                 app.type = t;
             },
             statSelect: (s) => {
                 app.stat = s;
+                app.value = app.selectedPlayer[s];
             }
         }
     });

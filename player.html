@@ -264,15 +264,17 @@
     }
 
     window.onload = _ => {
-        fetch('/stats',{method:'GET'}).then(res=>res.json())
+        // - POST - fetch('/playerstats',{method:'post',headers:{'content-type':'application/json'},body:JSON.stringify({0:'76561198013701085'})})
+        fetch('/getdb',{method:'GET'}).then(res=>res.json())
             .then((data)=>{
                 console.log(data);
-                app.playerStats = data;
+                app.playerStats = {0:null};
+                app.playerStats["0"] = data;
                 //grab player
                 let player = getUrlParam('player',null);
                 //console.log(player);
                 for(let p of app.playerStats["0"]){
-                    if(p["id"] == "" + player){
+                    if(p["steamid"] == "" + player){
                         app.currentPlayer = p;
                         roundPlayer();
                         app.currentPlayer.kda = Math.round(p["demos"]/p["demoed"] * 100) / 100;
@@ -433,6 +435,20 @@
         );
 
         
+    }
+
+    function getPlayerDB(id){
+        $.ajax({
+            headers:{
+                'content-type':'application/json'
+            },
+            type:'post',
+            url:'../playerstats',
+            data:JSON.stringify({0:id}),
+            success: function(res){
+                return res[0];
+            }
+        });
     }
 
 </script>

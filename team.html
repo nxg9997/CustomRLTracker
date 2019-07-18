@@ -107,7 +107,7 @@
                     </div>
                     
                     <div class="mdl-cell mdl-cell--12-col pCell" v-for="player in playerStats['0']">
-                        <div class="mdl-grid p-card mdl-js-ripple-effect" v-on:click="profile(player['id'])">
+                        <div class="mdl-grid p-card mdl-js-ripple-effect" v-on:click="profile(player['steamid'])">
                             <div class="mdl-cell mdl-cell--10-col mdl-grid">
                                 <div class="mdl-cell mdl-cell--3-col">
                                     <h4><span style='color:rgb(243,110,33)'>D{{player["division"]}}</span> {{player["name"]}}</h4>
@@ -161,18 +161,18 @@
     });
 
     window.onload = _ => {
-        fetch('/stats',{method:'GET'}).then(res=>res.json())
+        fetch('/getdb',{method:'GET'}).then(res=>res.json())
             .then((data)=>{
-                fetch('/test',{method:'GET'}).then(res2=>res2.json())
+                fetch('/playtime',{method:'GET'}).then(res2=>res2.json())
                     .then((data2)=>{
                         console.log(data);
                         //app.playerStats["0"] = sort('division',data["0"]);
-                        app.playerStats = data;
+                        app.playerStats["0"] = data;
                         console.log(data2);
 
-                        for(let p of app.playerStats['0']){
-                            for(let t of data2["result"]){
-                                if(p["id"] == t["user"]["response"]["players"]["0"]["steamid"]){
+                        for(let p of app.playerStats["0"]){
+                            for(let t of data2){
+                                if(p["steamid"] == t["steamid"]){
                                     try{
                                         for(let g of t["recent"]["response"]["games"]){
                                             if(g["name"] == 'Rocket League'){

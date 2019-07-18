@@ -139,10 +139,13 @@ window.onload = _ => {
     /*player.width = window.innerWidth;
     player.height = window.innerHeight;*/
     getData();
-    fetch('/clips',{method:'GET'}).then(res=>res.json())
+    fetch('/clipdb',{method:'GET'}).then(res=>res.json())
         .then((data)=>{
             console.log(data);
-            clips = data["0"];
+            //clips = data;
+            for(let d of data){
+                clips.push(d.id);
+            }
             swapGifSource(false); // - temp disabled to work on home page
 
             // - CORS restriction with the following code (this code tries to buffer video before being played)
