@@ -549,6 +549,7 @@ function getDataDB(id){
     return result;
 }
 
+// - gets all players in the database
 app.get('/getdb', function(req,res){
     let result = null;
 
@@ -716,6 +717,28 @@ app.delete('/clipdb',(req,res)=>{
     conn.end();
 });
 
+// - get all the clips in the database
+app.get('/clipdb',(req,res)=>{
+    let conn = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'tracker'
+    });
+    conn.connect();
+    conn.query(`select * from clips`,(err,res2,fields)=>{
+        if(err){
+            console.log(err);
+            res.send({result: 'error'});
+            return;
+        }
+        else{
+            res.send(JSON.stringify(res2));
+        }
+    });
+    conn.end();
+});
+
 // - update player in the database
 app.post('/updatedb',(req,res)=>{
     if(req.body["1"] != password){
@@ -763,6 +786,15 @@ app.post('/updatedb',(req,res)=>{
     
 
     res.send({result:"done"});
+});
+
+app.post('/auth',(req,res)=>{
+    if(req.body['0'] === password){
+        res.send({result:true});
+    }
+    else{
+        res.send({result:false});
+    }
 });
 
 //initDB();

@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-deep_orange.min.css">
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <!--getmdl-select-->   
+    <link rel="stylesheet" href="getmdl-select-master/getmdl-select.min.css">
+    <script defer src="getmdl-select-master/getmdl-select.min.js"></script>
     <link
         type="text/css"
         rel="stylesheet"
@@ -37,6 +40,9 @@
             background-color: rgba(0, 0, 0, .25);
             border-radius: 10px;
         }
+        .auth{
+            display: none;
+        }
     </style>
     <title>RIT RL Tracker - Admin</title>
 </head>
@@ -44,18 +50,19 @@
     <div class="demo-layout-transparent mdl-layout mdl-js-layout" id="app">
         <header class="mdl-layout__header mdl-layout__header--transparent">
             <div class="mdl-layout__header-row">
-            <!-- Title -->
-            <span class="mdl-layout-title">{{title}}</span>
-            <!-- Add spacer, to align navigation to the right -->
-            <div class="mdl-layout-spacer"></div>
-            <!-- Navigation -->
-            <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="..">Home</a>
-                <a class="mdl-navigation__link" href="../team.html">Team</a>
-                <a class="mdl-navigation__link" href="../admin.html">Admin</a>
-                <a class="mdl-navigation__link" href="../upload.html">Upload</a>
-            </nav>
+                <!-- Title -->
+                <span class="mdl-layout-title">{{title}}</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation -->
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="..">Home</a>
+                    <a class="mdl-navigation__link" href="../team.html">Team</a>
+                    <a class="mdl-navigation__link" href="../admin.html">Admin</a>
+                    <a class="mdl-navigation__link" href="../upload.html">Upload</a>
+                </nav>
             </div>
+            
         </header>
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">{{title}}</span>
@@ -67,8 +74,43 @@
             </nav>
         </div>
         <main class="mdl-layout__content">
-            <div class="mdl-grid">
+            <div class="mdl-grid" v-bind:class="{auth:allow}">
                 <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-layout-spacer"></div>
+                    <h1>Admin Page</h1>
+                    <div class="mdl-layout-spacer"></div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-layout-spacer"></div>
+                    <h3>Please provide authentication</h3>
+                    <div class="mdl-layout-spacer"></div>
+                </div>
+                <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                    <div class="mdl-layout-spacer"></div>
+                    <div class="mdl-cell mdl-cell--6-col">
+                        <form action="#">
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <input class="mdl-textfield__input" type="password" id="access" v-model="access"/>
+                                <label class="mdl-textfield__label" for="access">Access Code</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mdl-layout-spacer"></div>
+                    <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="auth" v-on:click="auth">Submit</button>
+                    </div>
+                    <div class="mdl-layout-spacer"></div>
+                </div>
+            </div>
+            <div class="mdl-grid" v-bind:class="{auth:!allow}">
+            <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                <div class="mdl-tabs__tab-bar">
+                    <a href="#scroll-tab-1" class="mdl-tabs__tab is-active">Update Roster</a>
+                    <!--a href="#scroll-tab-2" class="mdl-layout__tab">Remove Player</a-->
+                    <a href="#scroll-tab-3" class="mdl-tabs__tab">Edit Player</a>
+                    <a href="#scroll-tab-4" class="mdl-tabs__tab">Clips</a>
+                </div>
+                <!--div class="mdl-cell mdl-cell--12-col mdl-grid">
                     <div class="mdl-grid mdl-cell mdl-cell--12-col">
                         <div class="mdl-layout-spacer"></div>
                         <div><h4>Authentication</h4></div>
@@ -86,117 +128,163 @@
                         </div>
                         <div class="mdl-layout-spacer"></div>
                     </div>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-grid">
-                    <div class="mdl-grid">
-                        <div class="mdl-layout-spacer"></div>
-                        <div><h4>New Player</h4></div>
-                        <div class="mdl-layout-spacer"></div>
-                    </div>
-                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
-                        <div class="mdl-layout-spacer"></div>
-                        <div class="mdl-cell mdl-cell--6-col">
-                            <form action="#">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
-                                    <label class="mdl-textfield__label" for="sid64">SteamID64</label>
-                                </div>
-                            </form>
+                </div-->
+                
+                <div class="mdl-tabs__panel is-active" id="scroll-tab-1">
+                    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>Update Roster</h4></div>
+                            <div class="mdl-layout-spacer"></div>
                         </div>
-                        <div class="mdl-layout-spacer"></div>
-                        <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="post" v-on:click="post">Add Player</button>
+                        <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <form action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
+                                        <label class="mdl-textfield__label" for="sid64">SteamID64</label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="post" v-on:click="post">Add Player</button>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="delete" v-on:click="deletep">Delete Player</button>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
                         </div>
-                        <div class="mdl-layout-spacer"></div>
-                    </div>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-grid">
-                    <div class="mdl-grid">
-                        <div class="mdl-layout-spacer"></div>
-                        <div><h4>Remove Player</h4></div>
-                        <div class="mdl-layout-spacer"></div>
-                    </div>
-                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
-                        <div class="mdl-layout-spacer"></div>
-                        <div class="mdl-cell mdl-cell--6-col">
-                            <form action="#">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
-                                    <label class="mdl-textfield__label" for="sid64">SteamID64</label>
-                                </div>
-                            </form>
+                        <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell">
+                                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                                    <thead>
+                                        <tr>
+                                            <th class="mdl-data-table__cell--non-numeric">Name</th>
+                                            <th class="mdl-data-table__cell--non-numeric">steamID64</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="p of playerData" v-on:click="tableClick(p)">
+                                            <td class="mdl-data-table__cell--non-numeric">{{p.name}}</td>
+                                            <td>{{p.steamid}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
                         </div>
-                        <div class="mdl-layout-spacer"></div>
-                        <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="delete" v-on:click="deletep">Delete Player</button>
-                        </div>
-                        <div class="mdl-layout-spacer"></div>
-                    </div>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-grid">
-                    <div class="mdl-grid">
-                        <div class="mdl-layout-spacer"></div>
-                        <div><h4>Edit Player</h4></div>
-                        <div class="mdl-layout-spacer"></div>
-                    </div>
-                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
-                        <div class="mdl-layout-spacer"></div>
-                        <div class="mdl-cell mdl-cell--6-col">
-                            <form action="#">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
-                                    <label class="mdl-textfield__label" for="sid64">SteamID64</label>
-                                </div>
-                            </form>
-                            <form action="#">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="type" v-model="type"/>
-                                    <label class="mdl-textfield__label" for="type">Edit Type</label>
-                                </div>
-                            </form>
-                            <form action="#">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="stat" v-model="stat"/>
-                                    <label class="mdl-textfield__label" for="stat">Stat</label>
-                                </div>
-                            </form>
-                            <form action="#">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="value" v-model="value"/>
-                                    <label class="mdl-textfield__label" for="value">Value</label>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="mdl-layout-spacer"></div>
-                        <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="update" v-on:click="update">Update Player</button>
-                        </div>
-                        <div class="mdl-layout-spacer"></div>
                     </div>
                 </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-grid">
-                    <div class="mdl-grid">
-                        <div class="mdl-layout-spacer"></div>
-                        <div><h4>Add Clip</h4></div>
-                        <div class="mdl-layout-spacer"></div>
+                <!--section class="mdl-layout__tab-panel" id="scroll-tab-2">
+                    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>Remove Player</h4></div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                        <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <form action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
+                                        <label class="mdl-textfield__label" for="sid64">SteamID64</label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="delete" v-on:click="deletep">Delete Player</button>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
                     </div>
-                    <div class="mdl-grid mdl-cell mdl-cell--12-col">
-                        <div class="mdl-layout-spacer"></div>
-                        <div class="mdl-cell mdl-cell--6-col">
-                            <form action="#">
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="clip" v-model="clip"/>
-                                    <label class="mdl-textfield__label" for="clip">Clip (gygID)</label>
-                                </div>
-                            </form>
+                </section-->
+                <div class="mdl-tabs__panel" id="scroll-tab-3">
+                    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>Edit Player</h4></div>
+                            <div class="mdl-layout-spacer"></div>
                         </div>
-                        <div class="mdl-layout-spacer"></div>
-                        <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="clippost" v-on:click="clippost">Add Clip</button>
+                        <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <form action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="sid64" v-model="sid64"/>
+                                        <label class="mdl-textfield__label" for="sid64">SteamID64</label>
+                                    </div>
+                                </form>
+                                <form action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
+                                        <input class="mdl-textfield__input" type="text" id="type" v-model="type" readonly/>
+                                        <input type="hidden" value="" name="type">
+                                        <label class="mdl-textfield__label" for="type">Edit Type</label>
+                                        <ul for="type" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                                            <li class="mdl-menu__item" data-val="change" v-on:click="typeSelect('change')">Change</li>
+                                            <li class="mdl-menu__item" data-val="add" v-on:click="typeSelect('add')">Add</li>
+                                        </ul>
+                                    </div>
+                                </form>
+                                <form action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select">
+                                        <input class="mdl-textfield__input" type="text" id="stat" v-model="stat" readonly/>
+                                        <input type="hidden" value="" name="stat">
+                                        <label class="mdl-textfield__label" for="stat">Stat</label>
+                                        <ul for="stat" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                                            <li v-for="s in statTypes" class="mdl-menu__item" :data-val="s" v-on:click="statSelect(s)">{{s}}</li>
+                                        </ul>
+                                    </div>
+                                </form>
+                                <form action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="value" v-model="value"/>
+                                        <label class="mdl-textfield__label" for="value">Value</label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="update" v-on:click="update">Update Player</button>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
                         </div>
-                        <div class="mdl-layout-spacer"></div>
                     </div>
                 </div>
+                <div class="mdl-tabs__panel" id="scroll-tab-4">
+                    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>Manage Clips</h4></div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                        <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <form action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="clip" v-model="clip"/>
+                                        <label class="mdl-textfield__label" for="clip">Clip (gygID)</label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="clippost" v-on:click="clippost">Add Clip</button>
+                            </div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="clipdel" v-on:click="clipdel">Remove Clip</button>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!--div class="mdl-cell mdl-cell--3-col">
                     <form action="#">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -261,6 +349,7 @@
                     </div>
                 </div-->
             </div>
+            </div>
             
         </main>
     </div>
@@ -284,7 +373,39 @@
             post: addplayerdb,
             deletep: deletePlayer,
             update: updatePlayer,
-            clippost: addClip
+            clippost: addClip,
+            clipdel: delClip,
+            auth: authenticate,
+            allow: false,
+            playerData: [],
+            clips: [],
+            statTypes: [
+                'steamid',
+                'name',
+                'goals',
+                'assists',
+                'saves',
+                'shots',
+                'demos',
+                'demoed',
+                'games',
+                'division',
+                'defense_time',
+                'offense_time',
+                'neutral_time'
+            ]
+        },
+        methods: {
+            tableClick: (player) => {
+                //console.log(e);
+                app.sid64 = player.steamid;
+            },
+            typeSelect: (t) => {
+                app.type = t;
+            },
+            statSelect: (s) => {
+                app.stat = s;
+            }
         }
     });
     let snackbarContainer = document.querySelector('#toast');
@@ -296,9 +417,38 @@
     let stat = document.querySelector('#stat');
     let clip = document.querySelector('#clip');
 
+    function authenticate(){
+        $.ajax({
+            headers:{
+                'content-type': "application/json"
+            },
+            type: 'POST',
+            url: '../auth',
+            data: JSON.stringify({
+                0: access.value
+            }),
+            success: function(res){
+                app.allow = res["result"];
+                if(!res["result"]){
+                    let data = {message: "Invalid authentication key"};
+                    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+                }
+                else{
+                    $.ajax({
+                        type: 'GET',
+                        url: '../getdb',
+                        success: function(res){
+                            app.playerData = res;
+                            console.log(app.playerData)
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     function addPlayer() {
-        console.log(access.value);
+        //console.log(access.value);
         $.ajax({
             headers:{
                 'content-type': "application/json"
@@ -317,7 +467,7 @@
     };
 
     function addClip() {
-        console.log(access.value);
+        //console.log(access.value);
         $.ajax({
             headers:{
                 'content-type': "application/json"
@@ -335,8 +485,27 @@
         });
     };
 
+    function delClip() {
+        //console.log(access.value);
+        $.ajax({
+            headers:{
+                'content-type': "application/json"
+            },
+            type: 'DELETE',
+            url: "../clipdb",
+            data: JSON.stringify({
+                0: app.clip,
+                1: app.access
+            }),
+            success: function(res){
+                let data = {message: "Updates received by the server :)"};
+                snackbarContainer.MaterialSnackbar.showSnackbar(data);
+            }
+        });
+    };
+
     function deletePlayer() {
-        console.log(access.value);
+        //console.log(access.value);
         $.ajax({
             headers:{
                 'content-type': "application/json"
