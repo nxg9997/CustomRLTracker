@@ -171,9 +171,12 @@ function stealStats(id){
                         conn.query(`select * from stats`,(err,res,fields)=>{
                             if(err) return;
                             else{
+                                let count = 0;
+                                let completed = 0;
                                 for(let i = 1; i < parsed.length; i++){
                                     for(let s of res){
                                         if(parsed[i][1] == s.name){
+                                            count++;
                                             s["goals"] += parseInt(parsed[i][5]);
                                             s["assists"] += parseInt(parsed[i][6]);
                                             s["saves"] += parseInt(parsed[i][7]);
@@ -191,6 +194,10 @@ function stealStats(id){
                                                     return;
                                                 }
                                                 else{
+                                                    completed++;
+                                                    if(count == completed){
+                                                        conn.end();
+                                                    }
                                                     //console.log(s.name + " has been updated");
                                                 }
                                             });
