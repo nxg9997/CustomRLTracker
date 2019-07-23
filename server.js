@@ -100,7 +100,7 @@ function stealStats(id){
 
     conn.connect();
 
-    conn.query(`insert into replays (id) values("?")`,
+    conn.query(`insert into replays (id) values(?)`,
     [
         id
     ],
@@ -187,7 +187,7 @@ function stealStats(id){
                                             s["neutral_time"] += parseFloat(parsed[i][41]);
                                             s["offense_time"] += parseFloat(parsed[i][42]);
 
-                                            conn.query(`update stats set goals=?, assists=?, saves=?, shots=?, demos=?, demoed=?, games=?, defense_time=?, neutral_time=?, offense_time=? where steamid="?"`,
+                                            conn.query(`update stats set goals=?, assists=?, saves=?, shots=?, demos=?, demoed=?, games=?, defense_time=?, neutral_time=?, offense_time=? where steamid=?`,
                                             [
                                                 s.goals,
                                                 s.assists,
@@ -302,7 +302,7 @@ function getDataDB(id){
 
     conn.connect();
 
-    conn.query(`select * from stats where steamid="?"`,
+    conn.query(`select * from stats where steamid=?`,
     [
         id
     ],
@@ -329,7 +329,7 @@ app.post('/playerstats',(req,res)=>{
 
     conn.connect();
 
-    conn.query(`select * from stats where steamid="?"`,
+    conn.query(`select * from stats where steamid=?`,
     [
         req.body["0"]
     ],
@@ -406,7 +406,7 @@ app.post('/addplayerdb', function(req,res){
 
             conn.connect();
 
-            conn.query(`insert into stats (steamid,name,goals,assists,saves,shots,demos,demoed,games,division,defense_time,offense_time,neutral_time) values ("?","${obj['user']["response"]["players"][0]["personaname"]}",0,0,0,0,0,0,0,0,0,0,0)`,
+            conn.query(`insert into stats (steamid,name,goals,assists,saves,shots,demos,demoed,games,division,defense_time,offense_time,neutral_time) values (?,"${obj['user']["response"]["players"][0]["personaname"]}",0,0,0,0,0,0,0,0,0,0,0)`,
             [
                 id
             ],
@@ -442,7 +442,7 @@ app.delete('/deletedb', (req,res)=>{
     }
     let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
-    conn.query(`delete from stats where steamid="?"`,
+    conn.query(`delete from stats where steamid=?`,
     [
         req.body["0"]
     ],
@@ -467,7 +467,7 @@ app.post('/clipdb',(req,res)=>{
     }
     let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
-    conn.query(`insert into clips (id) values("?")`,
+    conn.query(`insert into clips (id) values(?)`,
     [
         req.body["0"]
     ],(err,res2,fields)=>{
@@ -491,7 +491,7 @@ app.delete('/clipdb',(req,res)=>{
     }
     let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
-    conn.query(`delete from clips where id="?"`,
+    conn.query(`delete from clips where id=?`,
     [
         req.body["0"]
     ],
@@ -535,7 +535,7 @@ app.post('/updatedb',(req,res)=>{
     conn.connect();
     for(let p of req.body["0"]){
         let newVal;
-        conn.query(`select * from stats where steamid="?"`,
+        conn.query(`select * from stats where steamid=?`,
         [
             p["id"]
         ],
@@ -554,7 +554,7 @@ app.post('/updatedb',(req,res)=>{
                 else if(p["type"] === 'change'){
                     newVal = p["value"];
                 }
-                conn.query(`update stats set ? = ? where steamid="?"`,
+                conn.query(`update stats set ? = ? where steamid=?`,
                 [
                     p["stat"],
                     newVal,
