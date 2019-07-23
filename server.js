@@ -346,12 +346,7 @@ app.post('/playerstats',(req,res)=>{
 app.get('/getdb', function(req,res){
     let result = null;
 
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
 
     conn.connect();
 
