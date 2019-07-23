@@ -97,10 +97,10 @@ app.post('/steal',(req,res)=>{
 function stealStats(id){
 
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
 
     conn.connect();
@@ -253,10 +253,10 @@ function stealStats(id){
 //adds all json stats data into a pre-existing database
 function initDB(){
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
 
     conn.connect();
@@ -291,10 +291,10 @@ function getDataDB(id){
     let result = null;
 
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
 
     conn.connect();
@@ -319,10 +319,10 @@ function getDataDB(id){
 app.post('/playerstats',(req,res)=>{
     //console.log(req.body);
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
 
     conn.connect();
@@ -347,10 +347,10 @@ app.get('/getdb', function(req,res){
     let result = null;
 
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
 
     conn.connect();
@@ -380,10 +380,10 @@ app.post('/addplayerdb', function(req,res){
     let id = req.body["0"];
     //console.log(req.body);
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
 
     https.get(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${id}`, (res3) => {
@@ -439,10 +439,10 @@ app.delete('/deletedb', (req,res)=>{
         return;
     }
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
     conn.connect();
     conn.query(`delete from stats where steamid="${req.body["0"]}"`,(err,res2,fields)=>{
@@ -465,10 +465,10 @@ app.post('/clipdb',(req,res)=>{
         return;
     }
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
     conn.connect();
     conn.query(`insert into clips (id) values("${req.body["0"]}")`,(err,res2,fields)=>{
@@ -491,10 +491,10 @@ app.delete('/clipdb',(req,res)=>{
         return;
     }
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
     conn.connect();
     conn.query(`delete from clips where id="${req.body["0"]}"`,(err,res2,fields)=>{
@@ -513,10 +513,10 @@ app.delete('/clipdb',(req,res)=>{
 // - get all the clips in the database
 app.get('/clipdb',(req,res)=>{
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
     conn.connect();
     conn.query(`select * from clips`,(err,res2,fields)=>{
@@ -539,10 +539,10 @@ app.post('/updatedb',(req,res)=>{
         return;
     }
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
     conn.connect();
     for(let p of req.body["0"]){
@@ -595,10 +595,10 @@ app.post('/auth',(req,res)=>{
 app.get('/playtime',(req,res)=>{
 
     let conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'password',
-        database: 'tracker'
+        host: config.mysql_host,
+        user: config.mysql_user,
+        password: config.mysql_pass,
+        database: config.mysql_db
     });
     conn.connect();
     conn.query(`select * from stats`,(err,res2,fields)=>{
