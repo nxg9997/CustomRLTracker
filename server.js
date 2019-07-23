@@ -379,12 +379,7 @@ app.post('/addplayerdb', function(req,res){
     }
     let id = req.body["0"];
     //console.log(req.body);
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
 
     https.get(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${id}`, (res3) => {
         let data2 = "";
