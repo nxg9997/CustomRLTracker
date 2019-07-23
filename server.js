@@ -96,12 +96,7 @@ app.post('/steal',(req,res)=>{
 //grab stats from ballchasers based on the given replay id (arrives as a csv)
 function stealStats(id){
 
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
 
     conn.connect();
 
@@ -252,12 +247,7 @@ function stealStats(id){
 
 //adds all json stats data into a pre-existing database
 function initDB(){
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
 
     conn.connect();
 
@@ -290,12 +280,7 @@ function initDB(){
 function getDataDB(id){
     let result = null;
 
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
 
     conn.connect();
 
@@ -318,12 +303,7 @@ function getDataDB(id){
 // - sends the stats of a specific player based on the received steamID64
 app.post('/playerstats',(req,res)=>{
     //console.log(req.body);
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
 
     conn.connect();
 
@@ -403,12 +383,14 @@ app.post('/addplayerdb', function(req,res){
             conn.query(`insert into stats (steamid,name,goals,assists,saves,shots,demos,demoed,games,division,defense_time,offense_time,neutral_time) values ("${id}","${obj['user']["response"]["players"][0]["personaname"]}",0,0,0,0,0,0,0,0,0,0,0)`,(err,res2,fields)=>{
                 if(err){
                     //console.log(err);
+                    res.send({result:"fail"});
                     return;
                 }
                 else{
                     //console.log(res2);
                     /*result = res2;
                     res.send(result);*/
+                    res.send({result:"success"});
                 }
             });
 
@@ -428,12 +410,7 @@ app.delete('/deletedb', (req,res)=>{
         res.send({result:'bad access code'});
         return;
     }
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
     conn.query(`delete from stats where steamid="${req.body["0"]}"`,(err,res2,fields)=>{
         if(err){
@@ -454,12 +431,7 @@ app.post('/clipdb',(req,res)=>{
         res.send({result:'bad access code'});
         return;
     }
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
     conn.query(`insert into clips (id) values("${req.body["0"]}")`,(err,res2,fields)=>{
         if(err){
@@ -480,12 +452,7 @@ app.delete('/clipdb',(req,res)=>{
         res.send({result:'bad access code'});
         return;
     }
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
     conn.query(`delete from clips where id="${req.body["0"]}"`,(err,res2,fields)=>{
         if(err){
@@ -502,12 +469,7 @@ app.delete('/clipdb',(req,res)=>{
 
 // - get all the clips in the database
 app.get('/clipdb',(req,res)=>{
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
     conn.query(`select * from clips`,(err,res2,fields)=>{
         if(err){
@@ -528,12 +490,7 @@ app.post('/updatedb',(req,res)=>{
         res.send({result:'bad access code'});
         return;
     }
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
     for(let p of req.body["0"]){
         let newVal;
@@ -584,12 +541,7 @@ app.post('/auth',(req,res)=>{
 // - get the playtimes for each player, and attach their steamID
 app.get('/playtime',(req,res)=>{
 
-    let conn = mysql.createConnection({
-        host: config.mysql_host,
-        user: config.mysql_user,
-        password: config.mysql_pass,
-        database: config.mysql_db
-    });
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
     conn.query(`select * from stats`,(err,res2,fields)=>{
         if(err){
