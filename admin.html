@@ -599,7 +599,10 @@
             data: JSON.stringify({
                 0: app.sid64,
                 1: app.access
-            })
+            }),
+            success: function(res){
+                authenticate();
+            }
             
         });
     }
