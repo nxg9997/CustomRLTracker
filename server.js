@@ -562,9 +562,9 @@ app.post('/updatedb',(req,res)=>{
                 else if(p["type"] == 'change'){
                     newVal = p["value"];
                 }
-                conn.query(`update stats set ? = ? where steamid=?`,
+                conn.query(`update stats set ${p["stat"]} = ? where steamid=?`,
                 [
-                    p["stat"],
+                    //p["stat"],
                     newVal,
                     p["id"]
                 ],
