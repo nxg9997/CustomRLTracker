@@ -550,10 +550,10 @@ app.post('/updatedb',(req,res)=>{
             else{
                 //console.log(res2);
                 newVal = res2[0][p["stat"]];
-                if(p["type"] === 'add'){
+                if(p["type"] == 'add'){
                     newVal += p["value"];
                 }
-                else if(p["type"] === 'change'){
+                else if(p["type"] == 'change'){
                     newVal = p["value"];
                 }
                 conn.query(`update stats set ? = ? where steamid=?`,
