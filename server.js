@@ -531,6 +531,7 @@ app.post('/updatedb',(req,res)=>{
         res.send({result:'bad access code'});
         return;
     }
+    let error = '';
     let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
     for(let p of req.body["0"]){
@@ -543,6 +544,7 @@ app.post('/updatedb',(req,res)=>{
             if(err){
                 //console.log(err);
                 //res.send({result: 'error'});
+                error = err;
                 return;
             }
             else{
@@ -564,6 +566,7 @@ app.post('/updatedb',(req,res)=>{
                     if(err){
                         //console.log(err);
                         //res.send({result: 'error'});
+                        error = err;
                     }
                     else{
                         //res.send({result: 'success'});
@@ -576,7 +579,7 @@ app.post('/updatedb',(req,res)=>{
     }
     
 
-    res.send({result:"done"});
+    res.send({result:"done",error:error});
 });
 
 // - sends 'true' if the auth key is the same as the password
