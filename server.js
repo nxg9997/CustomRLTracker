@@ -532,8 +532,10 @@ app.post('/updatedb',(req,res)=>{
         return;
     }
     let error = '';
+    let count = req.body["0"].length;
     let conn = mysql.createConnection(process.env.JAWSDB_URL);
     conn.connect();
+    let num = 0;
     for(let p of req.body["0"]){
         let newVal;
         conn.query(`select * from stats where steamid=?`,
@@ -545,6 +547,10 @@ app.post('/updatedb',(req,res)=>{
                 //console.log(err);
                 //res.send({result: 'error'});
                 error = err;
+                num++;
+                if(num >= count){
+                    finish();
+                }
                 return;
             }
             else{
@@ -571,15 +577,23 @@ app.post('/updatedb',(req,res)=>{
                     else{
                         //res.send({result: 'success'});
                     }
-                    conn.end();
+                    num++;
+                    if(num >= count){
+                        finish();
+                    }
+                    //conn.end();
                 });
             }
         });
         
     }
-    
+    //finish();
+    function finish(){
+        conn.end();
+        res.send({result:"done",error:error});
+    }
 
-    res.send({result:"done",error:error});
+    
 });
 
 // - sends 'true' if the auth key is the same as the password
