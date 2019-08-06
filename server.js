@@ -647,6 +647,68 @@ app.get('/playtime',(req,res)=>{
     
 });
 
+//creates a backup of the current stats database using the given name
+app.post('./backupdb',(req,res)=>{
+    if(req.body['1'] != config.password){
+        res.send({result:'invalid auth'});
+        return;
+    }
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
+    conn.connect();
+    conn.query(`CREATE TABLE ${req.body['0']} AS (SELECT * FROM stats)`,(err,res2,fields)=>{
+        if(err){
+            res.send({result:'error',error:err});
+        }
+        else{
+            res.send({result:'success'});
+        }
+    });
+    conn.end();
+});
+
+//clears the current stats database
+app.post('./clearstatsdb',(req,res)=>{
+    if(req.body['1'] != config.password){
+        res.send({result:'invalid auth'});
+        return;
+    }
+    let conn = mysql.createConnection(process.env.JAWSDB_URL);
+    conn.connect();
+    conn.query(`UPDATE stats SET goals = 0 WHERE goals != 0;
+                UPDATE stats SET assists = 0 WHERE assists != 0;
+                UPDATE stats SET saves = 0 WHERE saves != 0;
+                UPDATE stats SET shots = 0 WHERE shots != 0;
+                UPDATE stats SET demos = 0 WHERE demos != 0;
+                UPDATE stats SET demoed = 0 WHERE demoed != 0;
+                UPDATE stats SET games = 0 WHERE games != 0;
+                UPDATE stats SET defense_time = 0 WHERE defense_time != 0;
+                UPDATE stats SET offense_time = 0 WHERE offense_time != 0;
+                UPDATE stats SET neutral_time = 0 WHERE neutral_time != 0;`,
+        (err,res2,fields)=>{
+            if(err){
+                res.send({result:'error',error:err});
+            }
+            else{
+                res.send({result:'success'});
+            }
+        }
+    );
+    conn.end();
+});
+
+/*
+UPDATE stats SET goals = 0 WHERE goals != 0;
+UPDATE stats SET assists = 0 WHERE assists != 0;
+UPDATE stats SET saves = 0 WHERE saves != 0;
+UPDATE stats SET shots = 0 WHERE shots != 0;
+UPDATE stats SET demos = 0 WHERE demos != 0;
+UPDATE stats SET demoed = 0 WHERE demoed != 0;
+UPDATE stats SET games = 0 WHERE games != 0;
+UPDATE stats SET defense_time = 0 WHERE defense_time != 0;
+UPDATE stats SET offense_time = 0 WHERE offense_time != 0;
+UPDATE stats SET neutral_time = 0 WHERE neutral_time != 0;
+*/
+
 //initDB();
 //getDataDB('76561198129260496');//test with whitebark's steamID
 

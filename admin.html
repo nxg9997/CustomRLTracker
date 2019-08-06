@@ -108,6 +108,7 @@
                     <!--a href="#scroll-tab-2" class="mdl-layout__tab">Remove Player</a-->
                     <a href="#scroll-tab-3" class="mdl-tabs__tab">Edit Player</a>
                     <a href="#scroll-tab-4" class="mdl-tabs__tab">Clips</a>
+                    <a href="#scroll-tab-5" class="mdl-tabs__tab">New Season</a>
                 </div>
                 <!--div class="mdl-cell mdl-cell--12-col mdl-grid">
                     <div class="mdl-grid mdl-cell mdl-cell--12-col">
@@ -325,6 +326,43 @@
                         </div>
                     </div>
                 </div>
+                <div class="mdl-tabs__panel" id="scroll-tab-5">
+                    <div class="mdl-cell mdl-cell--12-col mdl-grid">
+                        <!--dialog not working :(-->
+                        <dialog class="mdl-dialog">
+                            <div class="mdl-dialog__content">
+                                <h1>Are you sure?</h1>
+                                <p>Selecting <em>continue</em> will create a backup of the current season & clear the current season's stats.</p>
+                                <button class="mdl-button">Continue</button>
+                                <button class="mdl-button" v-on:click="closedialog">Cancel</button>
+                            </div>
+                        </dialog>
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>New Season</h4></div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                        <div class="mdl-grid">
+                            <p>NOTE: This will create a backup of the current season & clear the current season's stats.</p>
+                        </div>
+                        <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <form action="#">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                        <input class="mdl-textfield__input" type="text" id="season" v-model="season"/>
+                                        <label class="mdl-textfield__label" for="season">Current Season Name</label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                            <div class="mdl-cell mdl-cell--2-col mdl-cell--middle">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="newseason" v-on:click="newseason">Create</button>
+                            </div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                    </div>
+                </div>
                 
                 <!--div class="mdl-cell mdl-cell--3-col">
                     <form action="#">
@@ -435,7 +473,8 @@
                 'offense_time',
                 'neutral_time'
             ],
-            selectedPlayer: null
+            selectedPlayer: null,
+            season: ''
         },
         methods: {
             tableClick: (player) => {
@@ -449,6 +488,37 @@
             statSelect: (s) => {
                 app.stat = s;
                 app.value = app.selectedPlayer[s];
+            },
+            newseason: () => {
+                //dialog.showModal();
+                $.ajax({
+                    headers:{'content-type':'application/json'},
+                    type:'post',
+                    url:"../backupdb",
+                    data: JSON.stringify({
+                        0: app.season,
+                        1: app.access
+                    }),
+                    success: function(res){
+                        //authenticate();
+                        return;
+                        $.ajax({
+                            headers:{'content-type':'application/json'},
+                            type:'post',
+                            url:"../clearstatsdb",
+                            data: JSON.stringify({
+                                0: app.season,
+                                1: app.access
+                            }),
+                            success: function(res){
+                                //authenticate();
+                            }
+                        });
+                    }
+                });
+            },
+            closedialog: () => {
+                dialog.close();
             }
         }
     });
@@ -460,6 +530,7 @@
     let value = document.querySelector('#value');
     let stat = document.querySelector('#stat');
     let clip = document.querySelector('#clip');
+    var dialog = document.querySelector('dialog');
 
     function authenticate(){
         $.ajax({
