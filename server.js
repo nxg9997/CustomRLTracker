@@ -648,7 +648,7 @@ app.get('/playtime',(req,res)=>{
 });
 
 //creates a backup of the current stats database using the given name
-app.post('./backupdb',(req,res)=>{
+app.post('/backupdb',(req,res)=>{
     if(req.body['1'] != config.password){
         res.send({result:'invalid auth'});
         return;
@@ -667,7 +667,7 @@ app.post('./backupdb',(req,res)=>{
 });
 
 //clears the current stats database
-app.post('./clearstatsdb',(req,res)=>{
+app.post('/clearstatsdb',(req,res)=>{
     if(req.body['1'] != config.password){
         res.send({result:'invalid auth'});
         return;
