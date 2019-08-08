@@ -97,6 +97,7 @@ function stealTest(){
 
 
 
+
 /// https://html-online.com/articles/get-url-parameters-javascript/
 
 function getUrlVars() {

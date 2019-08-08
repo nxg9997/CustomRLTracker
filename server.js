@@ -696,6 +696,33 @@ app.post('/clearstatsdb',(req,res)=>{
     conn.end();
 });
 
+//perform a search query on ballchasing.com (using mimikes steamID) and send the html file back to the client for parsing (stupid api only lets me upload so I'm stealing their html lol)
+app.post('/yoink',(req,res)=>{
+    //console.log(req.body["1"]);
+    if(req.body['1'] != password){
+        res.status(400).send({data:'failed'});
+        return;
+    }
+    /*https.get({host:'ballchasing.com/?player-name=Steam%3a76561198152248230',path:'',headers:{accept:'html'}},(res2)=>{
+        //console.log(res2);
+        let data;
+        res2.on('data',(chunk)=>{
+            data = chunk;
+        });
+        res2.on('end', ()=>{
+            console.log(data.toString());
+            res.send(data);
+        });
+    });*/
+    var propertiesObject = { field1:`player-name=Steam%3a${req.body['0']}` };
+
+    Request({url:'https://ballchasing.com', qs:propertiesObject}, function(err, response, body) {
+        if(err) { console.log(err); return; }
+        //console.log(body.toString());
+        res.send({data:body});
+    });
+});
+
 /*
 UPDATE stats SET goals = 0 WHERE goals != 0;
 UPDATE stats SET assists = 0 WHERE assists != 0;

@@ -532,6 +532,65 @@
     let clip = document.querySelector('#clip');
     var dialog = document.querySelector('dialog');
 
+    function yoink(sid){
+        $.ajax({
+            url: '../yoink',
+            type: 'post',
+            data: {0:sid,1:app.access},
+            success: (data)=>{
+                console.log(data);
+
+                //put the stolen html into an arbitrary element to enable DOM
+                let blah = document.createElement('div');
+                blah.id = 'stolen';
+                blah.innerHTML = data.data;
+                console.log(blah);
+                blah.style.display = 'none';
+                //document.body.appendChild(blah);
+
+                //extract replay IDs from html data
+                let creplays = blah.querySelector('.creplays');//find the list of replays
+                console.log(creplays);
+                let items = creplays.querySelectorAll('li');//create an array of all the replays in the list
+                for(let i of items){//loop thru each replay
+                    //select the date from the replay
+                    let ei = i.querySelector('.extra-info');
+                    let divs = ei.querySelectorAll('div');
+                    for(let d of divs){
+                        if(d.title == 'Date'){
+                            //let date = Date.parse(d.innerHTML);
+                            //console.log(d.innerHTML);
+                            if(d.innerHTML.includes('2019')){//if the date is in 2019, grab the replay ID
+                                //console.log(d.innerHTML);
+                                let rid = i.querySelector('.replay-title').querySelector('a');//i.querySelector('.actions').querySelector('div').querySelector('a');
+                                
+                                let rval = rid.href.substr(rid.href.indexOf('replay/')+7);
+                                
+                                console.log(rval);//print the replay ID
+
+                                /*$.ajax({
+                                    url: '../steal',
+                                    type:'POST',
+                                    data:{
+                                        "0":rval
+                                    },
+                                    success: (res)=>{
+                                        console.log(rval + "uploaded");
+                                    },
+                                    error: (res)=>{
+                                        console.log(res);
+                                    }
+                                });*/
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        
+    }
+
     function authenticate(){
         $.ajax({
             headers:{
