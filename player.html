@@ -205,7 +205,7 @@
                                 <div class="mdl-layout-spacer"></div>
                                 <div class="stat-perf">
                                     <div><p class="stat-perf-name">Ranked Standard</p></div>
-                                    <div class="img-container"><img :src="currentPlayer['rank']"/></div>
+                                    <div class="img-container"><img id="rank-img" :src="currentPlayer['rank']"/></div>
                                     <!--div><p class="stat-perf-val">{{currentPlayer["rank"]}}</p></div-->
                                 </div>
                                 <div class="mdl-layout-spacer"></div>
@@ -305,6 +305,7 @@
                         test.src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
                         document.body.appendChild(test);*/
                         app.currentPlayer["rank"] = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.querySelector('#rank-img').src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
                         return;
                     }
                 }
