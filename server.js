@@ -723,6 +723,22 @@ app.post('/yoink',(req,res)=>{
     });
 });
 
+app.post('/yoinktracker',(req,res)=>{
+    //console.log(req.body["1"]);
+    /*if(req.body['1'] != password){
+        res.status(400).send({data:'failed'});
+        return;
+    }*/
+    //https://rocketleague.tracker.network/profile/steam/76561198261574626
+    //var propertiesObject = { field1:`player-name=Steam%3a${req.body['0']}` };
+
+    Request({url:`https://rocketleague.tracker.network/profile/steam/${req.body["0"]}`}, function(err, response, body) {
+        if(err) { console.log(err); return; }
+        //console.log(body.toString());
+        res.send({data:body});
+    });
+});
+
 /*
 UPDATE stats SET goals = 0 WHERE goals != 0;
 UPDATE stats SET assists = 0 WHERE assists != 0;

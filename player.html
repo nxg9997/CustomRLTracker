@@ -47,6 +47,12 @@
         .stat-perf-val{
             font-size: 25px;
         }
+        .stat-perf img {
+            width: 25%;
+            /*height: 5vh;*/
+            display: block;
+            margin: auto;
+        }
         .pCell{
             background-image: url('../webbanner.png');
             border-radius: 10px;
@@ -61,6 +67,9 @@
             background-blend-mode: screen;*/
             border-radius: 10px;
             color: white;
+        }
+        .img-container{
+            align-items: center;
         }
     </style>
     <title>RIT RL Tracker - Player</title>
@@ -192,6 +201,15 @@
                                 </div>
                                 <div class="mdl-layout-spacer"></div>
                             </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">Ranked Standard</p></div>
+                                    <div class="img-container"><img :src="currentPlayer['rank']"/></div>
+                                    <!--div><p class="stat-perf-val">{{currentPlayer["rank"]}}</p></div-->
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="mdl-cell mdl-cell--12-col nate-stats">
@@ -251,7 +269,8 @@
                 neutral_time:0,
                 offense_time:0,
                 kda:0,
-                total_time:0
+                total_time:0,
+                rank:'n/a'
             }
         }
     });
@@ -261,6 +280,36 @@
         app.currentPlayer.offense_time = Math.round(app.currentPlayer.offense_time * 100) / 100;
         app.currentPlayer.neutral_time = Math.round(app.currentPlayer.neutral_time * 100) / 100;
         app.currentPlayer.total_time = app.currentPlayer.defense_time + app.currentPlayer.offense_time + app.currentPlayer.neutral_time;
+    }
+
+    function yoinktracker(sid){
+        $.ajax({
+            url: '../yoinktracker',
+            type: 'post',
+            data: {0:sid},
+            success: (data)=>{
+                //console.log(data);
+                //put the stolen html into an arbitrary element to enable DOM
+                let blah = document.createElement('div');
+                blah.id = 'stolen';
+                blah.innerHTML = data.data;
+                //console.log(blah);
+                blah.style.display = 'none';
+                let tds = blah.querySelectorAll('tr');
+                //console.log(tds);
+                for(let t of tds){
+                    if(t.innerText.includes('Ranked Standard 3v3')){
+                        let rankedImg = t.querySelector('img').src;
+                        //console.log('https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image')));
+                        /*let test = new Image(100,100);
+                        test.src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.body.appendChild(test);*/
+                        app.currentPlayer["rank"] = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        return;
+                    }
+                }
+            }
+        });
     }
 
     window.onload = _ => {
@@ -281,6 +330,7 @@
                         break;
                     }
                 }
+                yoinktracker(''+player);
 
 
                 let actions = document.querySelector('#actions');

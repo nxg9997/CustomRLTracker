@@ -591,6 +591,35 @@
         
     }
 
+    function yoinktracker(sid){
+        $.ajax({
+            url: '../yoinktracker',
+            type: 'post',
+            data: {0:sid,1:app.access},
+            success: (data)=>{
+                console.log(data);
+                //put the stolen html into an arbitrary element to enable DOM
+                let blah = document.createElement('div');
+                blah.id = 'stolen';
+                blah.innerHTML = data.data;
+                console.log(blah);
+                blah.style.display = 'none';
+                let tds = blah.querySelectorAll('tr');
+                console.log(tds);
+                for(let t of tds){
+                    if(t.innerText.includes('Ranked Standard 3v3')){
+                        let rankedImg = t.querySelector('img').src;
+                        console.log('https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image')));
+                        let test = new Image(100,100);
+                        test.src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.body.appendChild(test);
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
     function authenticate(){
         $.ajax({
             headers:{
