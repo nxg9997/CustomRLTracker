@@ -552,7 +552,10 @@
                 let creplays = blah.querySelector('.creplays');//find the list of replays
                 console.log(creplays);
                 let items = creplays.querySelectorAll('li');//create an array of all the replays in the list
+                let count = 0;
                 for(let i of items){//loop thru each replay
+                    count++;
+                    if(count > 4) break;
                     //select the date from the replay
                     let ei = i.querySelector('.extra-info');
                     let divs = ei.querySelectorAll('div');
