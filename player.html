@@ -366,7 +366,7 @@
                         document.querySelector('#rank-img-standard').src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
                         
                         let txt = t.querySelector('.season-rank').parentElement.innerText;
-                        console.log(txt.split('\n'));
+                        //console.log(txt.split('\n'));
                         app.currentPlayer['rank_standard_mmr'] = txt.split('\n')[1];
                         break;
                     }
@@ -453,7 +453,7 @@
         // - POST - fetch('/playerstats',{method:'post',headers:{'content-type':'application/json'},body:JSON.stringify({0:'76561198013701085'})})
         fetch('/getdb',{method:'GET'}).then(res=>res.json())
             .then((data)=>{
-                console.log(data);
+                //console.log(data);
                 app.playerStats = {0:null};
                 app.playerStats["0"] = data;
                 //grab player
