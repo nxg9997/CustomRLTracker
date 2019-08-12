@@ -49,7 +49,7 @@
         }
         .stat-perf img {
             width: 25%;
-            /*height: 5vh;*/
+            /*max-height: 5vh;*/
             display: block;
             margin: auto;
         }
@@ -201,12 +201,53 @@
                                 </div>
                                 <div class="mdl-layout-spacer"></div>
                             </div>
+                            
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col nate-stats">
+                        <div class="mdl-grid">
+                            <div class="mdl-layout-spacer"></div>
+                            <div><h4>Ranked</h4></div>
+                            <div class="mdl-layout-spacer"></div>
+                        </div>
+                        <div class="mdl-grid">
                             <div class="mdl-cell mdl-grid">
                                 <div class="mdl-layout-spacer"></div>
                                 <div class="stat-perf">
-                                    <div><p class="stat-perf-name">Ranked Standard</p></div>
-                                    <div class="img-container"><img id="rank-img" :src="currentPlayer['rank']"/></div>
+                                    <div><p class="stat-perf-name">Standard</p></div>
+                                    <div class="img-container"><img id="rank-img-standard" :src="currentPlayer['rank_standard']"/></div>
                                     <!--div><p class="stat-perf-val">{{currentPlayer["rank"]}}</p></div-->
+                                    <div><p>{{currentPlayer['rank_standard_mmr']}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">Solo Standard</p></div>
+                                    <div class="img-container"><img id="rank-img-solo-standard" :src="currentPlayer['rank_solo_standard']"/></div>
+                                    <!--div><p class="stat-perf-val">{{currentPlayer["rank"]}}</p></div-->
+                                    <div><p>{{currentPlayer['rank_solo_standard_mmr']}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">Duel</p></div>
+                                    <div class="img-container"><img id="rank-img-duel" :src="currentPlayer['rank_duel']"/></div>
+                                    <!--div><p class="stat-perf-val">{{currentPlayer["rank"]}}</p></div-->
+                                    <div><p>{{currentPlayer['rank_duel_mmr']}}</p></div>
+                                </div>
+                                <div class="mdl-layout-spacer"></div>
+                            </div>
+                            <div class="mdl-cell mdl-grid">
+                                <div class="mdl-layout-spacer"></div>
+                                <div class="stat-perf">
+                                    <div><p class="stat-perf-name">Doubles</p></div>
+                                    <div class="img-container"><img id="rank-img-doubles" :src="currentPlayer['rank_doubles']"/></div>
+                                    <!--div><p class="stat-perf-val">{{currentPlayer["rank"]}}</p></div-->
+                                    <div><p>{{currentPlayer['rank_doubles_mmr']}}</p></div>
                                 </div>
                                 <div class="mdl-layout-spacer"></div>
                             </div>
@@ -270,7 +311,22 @@
                 offense_time:0,
                 kda:0,
                 total_time:0,
-                rank:'n/a'
+                rank_standard:'n/a',
+                rank_solo_standard:'n/a',
+                rank_doubles:'n/a',
+                rank_duel:'n/a',
+                rank_standard_mmr:'0',
+                rank_solo_standard_mmr:'0',
+                rank_doubles_mmr:'0',
+                rank_duel_mmr:'0'
+            },
+            trackerStats: {
+                wins:0,
+                goals:0,
+                saves:0,
+                shots:0,
+                mvps:0,
+                assists:0
             }
         }
     });
@@ -297,18 +353,96 @@
                 blah.style.display = 'none';
                 let tds = blah.querySelectorAll('tr');
                 //console.log(tds);
+
+                //loops are repeated to prevent grabing incorrect data from the tracker html
                 for(let t of tds){
                     if(t.innerText.includes('Ranked Standard 3v3')){
                         let rankedImg = t.querySelector('img').src;
-                        console.log('https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image')));
+                        //console.log('https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image')));
                         /*let test = new Image(100,100);
                         test.src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
                         document.body.appendChild(test);*/
-                        app.currentPlayer["rank"] = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
-                        document.querySelector('#rank-img').src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
-                        return;
+                        app.currentPlayer["rank_standard"] = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.querySelector('#rank-img-standard').src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        
+                        let txt = t.querySelector('.season-rank').parentElement.innerText;
+                        //console.log("standard mmr: " + txt.split('\n')[1]);
+                        app.currentPlayer['rank_standard_mmr'] = txt.split('\n')[1];
+                        break;
                     }
                 }
+                for(let t of tds){
+                    if(t.innerText.includes('Ranked Solo Standard 3v3')){
+                        let rankedImg = t.querySelector('img').src;
+                        //console.log('https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image')));
+                        /*let test = new Image(100,100);
+                        test.src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.body.appendChild(test);*/
+                        app.currentPlayer["rank_solo_standard"] = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.querySelector('#rank-img-solo-standard').src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        
+                        let txt = t.querySelector('.season-rank').parentElement.innerText;
+                        //console.log("standard mmr: " + txt.split('\n')[1]);
+                        app.currentPlayer['rank_solo_standard_mmr'] = txt.split('\n')[1];
+                        break;
+                    }
+                }
+                for(let t of tds){
+                    if(t.innerText.includes('Ranked Doubles 2v2')){
+                        let rankedImg = t.querySelector('img').src;
+                        //console.log('https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image')));
+                        /*let test = new Image(100,100);
+                        test.src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.body.appendChild(test);*/
+                        app.currentPlayer["rank_doubles"] = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.querySelector('#rank-img-doubles').src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        
+                        let txt = t.querySelector('.season-rank').parentElement.innerText;
+                        //console.log("standard mmr: " + txt.split('\n')[1]);
+                        app.currentPlayer['rank_doubles_mmr'] = txt.split('\n')[1];
+                        break;
+                    }
+                }
+                for(let t of tds){
+                    if(t.innerText.includes('Ranked Duel 1v1')){
+                        let rankedImg = t.querySelector('img').src;
+                        //console.log('https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image')));
+                        /*let test = new Image(100,100);
+                        test.src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.body.appendChild(test);*/
+                        app.currentPlayer["rank_duel"] = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        document.querySelector('#rank-img-duel').src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
+                        
+                        let txt = t.querySelector('.season-rank').parentElement.innerText;
+                        //console.log("standard mmr: " + txt.split('\n')[1]);
+                        app.currentPlayer['rank_duel_mmr'] = txt.split('\n')[1];
+                        break;
+                    }
+                }
+
+                let parsedStats = {
+                    wins:0,
+                    goals:0,
+                    saves:0,
+                    shots:0,
+                    mvps:0,
+                    assists:0
+                };
+                //x = x.replace(/\\"/g, '"');
+                let datadivs = blah.querySelectorAll('.value');
+                for(let i = 0; i < datadivs.length; i++){
+                    //console.log(datadivs[i]);
+                    switch(datadivs[i].attributes[1].value){
+                        case 'Wins':parsedStats['wins']=datadivs[i].innerHTML.replace(/\r?\n|\r/g, '');break;
+                        case 'Goals':parsedStats['goals']=datadivs[i].innerHTML.replace(/\r?\n|\r/g, '');break;
+                        case 'Saves':parsedStats['saves']=datadivs[i].innerHTML.replace(/\r?\n|\r/g, '');break;
+                        case 'Shots':parsedStats['shots']=datadivs[i].innerHTML.replace(/\r?\n|\r/g, '');break;
+                        case 'MVPs':parsedStats['mvps']=datadivs[i].innerHTML.replace(/\r?\n|\r/g, '');break;
+                        case 'Assists':parsedStats['assists']=datadivs[i].innerHTML.replace(/\r?\n|\r/g, '');break;
+                    }
+                }
+                //console.log(parsedStats);
+                app.trackerStats = parsedStats;
             }
         });
     }
