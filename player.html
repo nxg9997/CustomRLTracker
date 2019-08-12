@@ -366,7 +366,7 @@
                         document.querySelector('#rank-img-standard').src = 'https://rocketleague.tracker.network' + rankedImg.substr(rankedImg.indexOf('/Image'));
                         
                         let txt = t.querySelector('.season-rank').parentElement.innerText;
-                        //console.log("standard mmr: " + txt.split('\n')[1]);
+                        console.log(txt.split('\n'));
                         app.currentPlayer['rank_standard_mmr'] = txt.split('\n')[1];
                         break;
                     }
