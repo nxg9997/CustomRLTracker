@@ -106,7 +106,7 @@ function stealStats(id){
     ],
     (err,res,fields)=>{
         if(err){
-            //console.log(err);
+            console.log(err);
             return;
         }
         else{
@@ -125,12 +125,12 @@ function stealStats(id){
 
             fs.readFile('./temp/' + `${id}-players.csv`,(err,data)=>{
                 if(err){
-                    //console.log(err);
+                    console.log(err);
                     return;
                 }
                 else{
                     if(data.toString().includes('DOCTYPE html')){
-                        //console.log('bad file, link redirected :(');
+                        console.log('bad file, link redirected :(');
                         //return;
                     }
                     else{
@@ -203,7 +203,7 @@ function stealStats(id){
                                             ],
                                             (err,res,fields)=>{
                                                 if(err){
-                                                    //console.log(err);
+                                                    console.log(err);
                                                     return;
                                                 }
                                                 else{
@@ -253,7 +253,7 @@ function stealStats(id){
                         
                     }
                     fs.unlink('./temp/' + `${id}-players.csv`,(err)=>{
-                        if(err){/*console.log(err);*/}
+                        if(err){console.log(err);}
                     });
                 }
             })
