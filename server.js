@@ -13,6 +13,7 @@ let upload = multer();
 const axios = require('axios');
 let Request = require('request');
 let mysql = require('mysql');
+let logger = require('heroku-logger');
 
 //get config information from config.js
 let config = require("./config");
@@ -758,3 +759,4 @@ UPDATE stats SET neutral_time = 0 WHERE neutral_time != 0;
 //start server
 app.listen(port);
 //console.log(`Server started on port ${port}`);
+logger.info('server deployed and ready to go! :)');
