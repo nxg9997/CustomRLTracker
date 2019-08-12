@@ -113,6 +113,7 @@ function stealStats(id){
         }
         else{
             //console.log(res);
+            logger.info('stealing id: ' + id);
             doSteal();
         }
     });
@@ -140,6 +141,7 @@ function stealStats(id){
                     else{
                         //replace all semicolons with commas like a csv is supposed to have :////// (nvm doesnt really matter lol)
                         let stringyData = data.toString();
+                        logger.info('stringydata: ' + stringyData);
                         //stringyData = stringyData.replace(/;/g,",");
                         //console.log(stringyData);
 
@@ -174,6 +176,7 @@ function stealStats(id){
                         conn.query(`select * from stats`,(err,res,fields)=>{
                             if(err) {logger.error(err);return;}
                             else{
+                                logger.info('queried stats');
                                 let count = 0;
                                 let completed = 0;
                                 for(let i = 1; i < parsed.length; i++){
@@ -211,6 +214,7 @@ function stealStats(id){
                                                     return;
                                                 }
                                                 else{
+                                                    logger.info('updated stats');
                                                     completed++;
                                                     if(count == completed){
                                                         conn.end();
@@ -258,6 +262,9 @@ function stealStats(id){
                     }
                     fs.unlink('./temp/' + `${id}-players.csv`,(err)=>{
                         if(err){logger.error(err);}
+                        else{
+                            logger.info('deleted temp csv');
+                        }
                     });
                 }
             })
