@@ -107,7 +107,8 @@ function stealStats(id){
     ],
     (err,res,fields)=>{
         if(err){
-            console.log(err);
+            //console.log(err);
+            logger.error(err);
             return;
         }
         else{
@@ -126,12 +127,14 @@ function stealStats(id){
 
             fs.readFile('./temp/' + `${id}-players.csv`,(err,data)=>{
                 if(err){
-                    console.log(err);
+                    //console.log(err);
+                    logger.error(err);
                     return;
                 }
                 else{
                     if(data.toString().includes('DOCTYPE html')){
-                        console.log('bad file, link redirected :(');
+                        //console.log('bad file, link redirected :(');
+                        logger.error('bad file, link redirected :(');
                         //return;
                     }
                     else{
@@ -169,7 +172,7 @@ function stealStats(id){
                         }*/
 
                         conn.query(`select * from stats`,(err,res,fields)=>{
-                            if(err) {console.log(err);return;}
+                            if(err) {logger.error(err);return;}
                             else{
                                 let count = 0;
                                 let completed = 0;
@@ -204,7 +207,7 @@ function stealStats(id){
                                             ],
                                             (err,res,fields)=>{
                                                 if(err){
-                                                    console.log(err);
+                                                    logger.error(err);
                                                     return;
                                                 }
                                                 else{
@@ -254,7 +257,7 @@ function stealStats(id){
                         
                     }
                     fs.unlink('./temp/' + `${id}-players.csv`,(err)=>{
-                        if(err){console.log(err);}
+                        if(err){logger.error(err);}
                     });
                 }
             })
