@@ -168,7 +168,7 @@ function stealStats(id){
                         }*/
 
                         conn.query(`select * from stats`,(err,res,fields)=>{
-                            if(err) return;
+                            if(err) {console.log(err);return;}
                             else{
                                 let count = 0;
                                 let completed = 0;
