@@ -141,7 +141,7 @@ function stealStats(id){
                     else{
                         //replace all semicolons with commas like a csv is supposed to have :////// (nvm doesnt really matter lol)
                         let stringyData = data.toString();
-                        logger.info('stringydata: ' + stringyData);
+                        //logger.info('stringydata: ' + stringyData);
                         //stringyData = stringyData.replace(/;/g,",");
                         //console.log(stringyData);
 
@@ -176,7 +176,7 @@ function stealStats(id){
                         conn.query(`select * from stats`,(err,res,fields)=>{
                             if(err) {logger.error(err);return;}
                             else{
-                                logger.info('queried stats');
+                                //logger.info('queried stats');
                                 let count = 0;
                                 let completed = 0;
                                 for(let i = 1; i < parsed.length; i++){
@@ -214,7 +214,7 @@ function stealStats(id){
                                                     return;
                                                 }
                                                 else{
-                                                    logger.info('updated stats');
+                                                    //logger.info('updated stats');
                                                     completed++;
                                                     if(count == completed){
                                                         conn.end();
@@ -263,7 +263,7 @@ function stealStats(id){
                     fs.unlink('./temp/' + `${id}-players.csv`,(err)=>{
                         if(err){logger.error(err);}
                         else{
-                            logger.info('deleted temp csv');
+                            //logger.info('deleted temp csv');
                         }
                     });
                 }
@@ -283,6 +283,7 @@ function initDB(){
     fs.readFile('stats.json',(err,data)=>{
         if(err){
             //console.log(err);
+            logger.error(err);
             return;
         }
         else{
@@ -292,6 +293,7 @@ function initDB(){
                 conn.query(`insert into stats (steamid,name,goals,assists,saves,shots,demos,demoed,games,division,defense_time,offense_time,neutral_time) values ("${s['id']}","${s['name']}",${s['goals']},${s['assists']},${s['saves']},${s['shots']},${s['demos']},${s['demoed']},${s['games']},${s['division']},${s['defense_time']},${s['offense_time']},${s['neutral_time']})`, (err,res,fields) => {
                     if(err){
                         //console.log(err);
+                        logger.error(err);
                         return;
                     }
                     else{
@@ -320,6 +322,7 @@ function getDataDB(id){
     (err,res,fields)=>{
         if(err){
             //console.log(err);
+            logger.error(err);
             return;
         }
         else{
@@ -347,6 +350,7 @@ app.post('/playerstats',(req,res)=>{
     (err,res2,fields)=>{
         if(err){
             //console.log(err);
+            logger.error(err);
             return;
         }
         else{
@@ -370,6 +374,7 @@ app.get('/getdb', function(req,res){
     conn.query(`select * from stats`,(err,res2,fields)=>{
         if(err){
             //console.log(err);
+            logger.error(err);
             return;
         }
         else{
@@ -424,6 +429,7 @@ app.post('/addplayerdb', function(req,res){
             (err,res2,fields)=>{
                 if(err){
                     //console.log(err);
+                    logger.error(err);
                     res.send({result:"fail"});
                     return;
                 }
@@ -439,6 +445,7 @@ app.post('/addplayerdb', function(req,res){
         });
     }).on('error', (err2) => {
         //res.send({result: 'error'});
+        logger.error(err2);
     });
 
     
@@ -460,6 +467,7 @@ app.delete('/deletedb', (req,res)=>{
     (err,res2,fields)=>{
         if(err){
             //console.log(err);
+            logger.error(err);
             res.send({result: 'error'});
             return;
         }
@@ -484,6 +492,7 @@ app.post('/clipdb',(req,res)=>{
     ],(err,res2,fields)=>{
         if(err){
             //console.log(err);
+            logger.error(err);
             res.send({result: 'error'});
             return;
         }
@@ -508,6 +517,7 @@ app.delete('/clipdb',(req,res)=>{
     ],
     (err,res2,fields)=>{
         if(err){
+            logger.error(err);
             //console.log(err);
             res.send({result: 'error'});
             return;
@@ -525,6 +535,7 @@ app.get('/clipdb',(req,res)=>{
     conn.connect();
     conn.query(`select * from clips`,(err,res2,fields)=>{
         if(err){
+            logger.error(err);
             //console.log(err);
             res.send({result: 'error'});
             return;
@@ -555,6 +566,7 @@ app.post('/updatedb',(req,res)=>{
         ],
         (err,res2,fields)=>{
             if(err){
+                logger.error(err);
                 //console.log(err);
                 //res.send({result: 'error'});
                 error = err;
@@ -581,6 +593,7 @@ app.post('/updatedb',(req,res)=>{
                 ],
                 (err,res2,fields)=>{
                     if(err){
+                        logger.error(err);
                         //console.log(err);
                         //res.send({result: 'error'});
                         error = err;
@@ -625,6 +638,7 @@ app.get('/playtime',(req,res)=>{
     conn.query(`select * from stats`,(err,res2,fields)=>{
         if(err){
             //console.log(err);
+            logger.error(err);
             res.send({result: 'error'});
             return;
         }
@@ -668,6 +682,7 @@ app.post('/backupdb',(req,res)=>{
     conn.connect();
     conn.query(`CREATE TABLE ${req.body['0']} AS (SELECT * FROM stats)`,(err,res2,fields)=>{
         if(err){
+            logger.error(err);
             res.send({result:'error',error:err});
         }
         else{
@@ -697,6 +712,7 @@ app.post('/clearstatsdb',(req,res)=>{
                 UPDATE stats SET neutral_time = 0 WHERE neutral_time != 0;`,
         (err,res2,fields)=>{
             if(err){
+                logger.error(err);
                 res.send({result:'error',error:err});
             }
             else{
@@ -728,7 +744,7 @@ app.post('/yoink',(req,res)=>{
     var propertiesObject = { field1:`player-name=Steam%3a${req.body['0']}` };
 
     Request({url:'https://ballchasing.com', qs:propertiesObject}, function(err, response, body) {
-        if(err) { console.log(err); return; }
+        if(err) { logger.error(err); return; }
         //console.log(body.toString());
         res.send({data:body});
     });
@@ -744,7 +760,7 @@ app.post('/yoinktracker',(req,res)=>{
     //var propertiesObject = { field1:`player-name=Steam%3a${req.body['0']}` };
 
     Request({url:`https://rocketleague.tracker.network/profile/steam/${req.body["0"]}`}, function(err, response, body) {
-        if(err) { console.log(err); return; }
+        if(err) { logger.error(err); return; }
         //console.log(body.toString());
         res.send({data:body});
     });
